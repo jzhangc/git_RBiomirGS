@@ -1,0 +1,15 @@
+Package: RBiomiRGS
+Type: Package
+Title: Simple to use package for machine learning-based miRNA pathway analysis.
+Version: 0.1.0
+Author: Jing Zhang
+Maintainer: Jing Zhang <jzhangcad@gmail.com>
+Description: The package uses logistic regression and other classifiers (neural network, CART) for miRNA gene set anlaysis.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
+    ggplot2 (>= 2.1.0), reshape2 (>= 1.4.1), ggrepel (>= 0.6.5), gtable (>= 0.2.0), grid (>= 3.2.4), 
+    biomaRt (>= 2.28.0), piano (>= 1.12.1), calibrate (>= 1.7.2),
+    parallel (>= 3.3.2), doParallel (>= 1.0.10), foreach (>= 1.4.3)
+RoxygenNote: 6.0.1
