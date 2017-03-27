@@ -206,7 +206,9 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
   if (!parallelComputing){
 
     out[] <- lapply(mir, function(m){
-      tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% tmpfunc(i = m, j = n, mode = queryType, percentage = predictPercentage)
+      tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
+        message(paste("searching ", n, " for ", m, " ...", sep = ""))
+        tmpfunc(i = m, j = n, mode = queryType, percentage = predictPercentage)}
       return(tmp)
     })
 
@@ -222,17 +224,29 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
       on.exit(stopCluster(cl)) # close connect when exiting the function
 
       out[] <- foreach(m = mir, .packages = "foreach") %dopar% {
-        tmpout <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% tmpfunc(m, n, mode = queryType, percentage = predictPercentage)
+        tmpout <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
+          message(paste("searching ", n, " for ", m, " ...", sep = ""))
+          tmpfunc(m, n, mode = queryType, percentage = predictPercentage)}
       }
 
     } else if (clusterType == "FORK"){ # macOS and Unix-like systmes only
+      # message
+      message(paste("searching ", db, " ...", sep = ""))
+
       # use mclapply from parallel pacakge for the FORK method
       out[] <- mclapply(mir, FUN = function(m){
-        tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% tmpfunc(m, n, mode = queryType, percentage = predictPercentage)
+        tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
+          cat(paste("searching ", n, " for ", m, " ...", sep = ""))
+          tmpfunc(m, n, mode = queryType, percentage = predictPercentage)}
         return(tmp)
       }, mc.cores = n_cores, mc.preschedule = FALSE)
 
     }
   }
+
+  #### message
+  message("done")
+
+  #### output
   return(out)
 }
