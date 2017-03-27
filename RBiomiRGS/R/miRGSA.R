@@ -1,6 +1,5 @@
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage("Written by Jing Zhang, Ph.D. Please direct questions to jzhangcad@gmail.com.")
-  suppressPackageStartupMessages(require(pathview))
   return(TRUE)
 }
 
@@ -26,7 +25,7 @@
 #' }
 #' @export
 rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
-                               queryType = NULL, predictPercentage = 5,
+                               queryType = NULL, predictPercentage = 10,
                                url = "http://multimir.ucdenver.edu/cgi-bin/multimir.pl",
                                parallelComputing = FALSE, clusterType = "PSOCK"){
 
@@ -64,7 +63,7 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
     }
   }
 
-  #### set up a tmpfunc for query, modified from multiMiR pacakge.
+  #### set up a tmpfunc for query
   # i - target miRNA
   # j - single database
   # mode - queryType ("validated", "predicted")
@@ -120,12 +119,12 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
       # initial syntax
       q <- paste("SELECT m.mature_mirna_acc, m.mature_mirna_id,",
                  "t.target_symbol, t.target_entrez, t.target_ensembl FROM",
-                 mirna.table, "AS m INNER JOIN", table, "AS i INNER JOIN",
+                 mirna.table, "AS m INNER JOIN", j, "AS i INNER JOIN",
                  target.table, "AS t ON (m.mature_mirna_uid=i.mature_mirna_uid",
                  "AND i.target_uid=t.target_uid) WHERE",
                  sep = " ")
 
-      if (table == "diana_microt") {
+      if (j == "diana_microt") {
         q <- sub(" FROM ", ", i.miTG_score AS score FROM ", q)
       } else if (j == "elmmo") {
         q <- sub(" FROM ", ", i.p AS score FROM ", q)
@@ -151,30 +150,27 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
       tmp_cutoff <- tmpfunc_cutoff()
       cutoff <- tmp_cutoff[[nm]][[paste(percentage, "%", sep = "")]]
 
-      if (!is.na(score.cutoff)) {
-        if (j == "diana_microt") {
-          q <- paste(q, "AND i.miTG_score >=", cutoff,
-                     "ORDER BY i.miTG_score DESC", sep = " ")
-        } else if (j == "elmmo") {
-          q <- paste(q, "AND i.p >=", cutoff, "ORDER BY i.p DESC",
-                     sep = " ")
-        } else if (j %in% c("microcosm", "mirdb", "pictar")) {
-          q <- paste(q, "AND i.score >=", cutoff,
-                     "ORDER BY i.score DESC", sep = " ")
-        } else if (j == "miranda") {
-          q <- paste(q, "AND i.mirsvr_score <=", cutoff,
-                     "ORDER BY i.mirsvr_score", sep = " ")
-        } else if (j == "pita") {
-          q <- paste(q, "AND i.ddG <=", cutoff, "ORDER BY i.ddG",
-                     sep = " ")
-        } else if (j == "targetscan") {
-          # q <- paste(q, 'AND i.site_type == 3', sep=' ')
-          q <- paste(q, "AND i.context_plus_score <=", cutoff,
-                     "ORDER BY i.context_plus_score",
-                     sep = " ")
-        }
+      if (j == "diana_microt") {
+        q <- paste(q, "AND i.miTG_score >=", cutoff,
+                   "ORDER BY i.miTG_score DESC", sep = " ")
+      } else if (j == "elmmo") {
+        q <- paste(q, "AND i.p >=", cutoff, "ORDER BY i.p DESC",
+                   sep = " ")
+      } else if (j %in% c("microcosm", "mirdb", "pictar")) {
+        q <- paste(q, "AND i.score >=", cutoff,
+                   "ORDER BY i.score DESC", sep = " ")
+      } else if (j == "miranda") {
+        q <- paste(q, "AND i.mirsvr_score <=", cutoff,
+                   "ORDER BY i.mirsvr_score", sep = " ")
+      } else if (j == "pita") {
+        q <- paste(q, "AND i.ddG <=", cutoff, "ORDER BY i.ddG",
+                   sep = " ")
+      } else if (j == "targetscan") {
+        # q <- paste(q, 'AND i.site_type == 3', sep=' ')
+        q <- paste(q, "AND i.context_plus_score <=", cutoff,
+                   "ORDER BY i.context_plus_score",
+                   sep = " ")
       }
-
     }
 
     ## query
@@ -190,7 +186,7 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
     } else if (l == 1) {
       warning(paste("No records returned for miRNA: ", i, " in database: ", j, ".", sep = ""))
     } else if (l == 0) {
-      cat(paste("Request to multiMiR web server faile. check the ",
+      cat(paste("Request to multiMiR web server failed. check the ",
                 "your query, or",
                 "use the multiMiR web server:",
                 "http://multimir.ucdenver.edu is temporarily down.\n"))
