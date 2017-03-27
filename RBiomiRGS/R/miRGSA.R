@@ -235,9 +235,7 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
 
       # use mclapply from parallel pacakge for the FORK method
       out[] <- mclapply(mir, FUN = function(m){
-        tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
-          cat(paste("searching ", n, " for ", m, " ...", sep = ""))
-          tmpfunc(m, n, mode = queryType, percentage = predictPercentage)}
+        tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% tmpfunc(m, n, mode = queryType, percentage = predictPercentage)
         return(tmp)
       }, mc.cores = n_cores, mc.preschedule = FALSE)
 
