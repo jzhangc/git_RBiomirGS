@@ -4,8 +4,8 @@
 \alias{rbiomirGS_mrnalist}
 \title{rbiomirGS_mrnalist}
 \usage{
-rbiomirGS_mrnalist(mir = NULL, sp = "hsa", queryType = NULL,
-  predictPercentage = 10,
+rbiomirGS_mrnalist(objTitle = "miRNA", mir = NULL, sp = "hsa",
+  queryType = NULL, predictPercentage = 10,
   url = "http://multimir.ucdenver.edu/cgi-bin/multimir.pl",
   parallelComputing = FALSE, clusterType = "PSOCK")
 }
@@ -25,13 +25,13 @@ rbiomirGS_mrnalist(mir = NULL, sp = "hsa", queryType = NULL,
 \item{predictPrecentage}{Set only if \code{queryType = "predicted"}. The percentage of the top scored mRNA predictions to return. Default is \code{5}.}
 }
 \value{
-The function returns a \code{list} object with mRNA targets for the query miRNAs.
+The function returns a \code{list} object with mRNA targets for the query miRNAs, as well as detailed resutls to the working directory as \code{csv} files.
 }
 \description{
 Obtain target mRNA list for miRNAs of interest. Resuls can be either predicted or validated. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.
 }
 \examples{
 \dontrun{
-mRNA <- rbiomirGS_mrnalist(mir = c("hsa-miR-26a-5p", "hsa-miR-100-5p"), sp = "hsa", queryType = "predicted", predictPercentage = 10)
+rbiomirGS_mrnalist(mir = c("hsa-miR-26a-5p", "hsa-miR-100-5p"), sp = "hsa", queryType = "predicted", predictPercentage = 10)
 }
 }

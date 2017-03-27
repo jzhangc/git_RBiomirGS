@@ -13,7 +13,7 @@
 #' @param url The database host server: "http://multimir.ucdenver.edu/cgi-bin/multimir.pl"
 #' @param parallelComputing If to use parallel computing or not. Default is \code{FALSE}.
 #' @param clusterType Only set when \code{parallelComputing = TRUE}, the type for parallel cluster. Options are \code{"PSOCK"} (all operating systems) and \code{"FORK"} (macOS and Unix-like system only). Default is \code{"PSOCK"}.
-#' @return The function returns a \code{list} object with mRNA targets for the query miRNAs.
+#' @return The function returns a \code{list} object with mRNA targets for the query miRNAs, as well as detailed resutls to the working directory as \code{csv} files.
 #' @import doParallel
 #' @import foreach
 #' @importFrom XML readHTMLTable
@@ -21,10 +21,10 @@
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @examples
 #' \dontrun{
-#' mRNA <- rbiomirGS_mrnalist(mir = c("hsa-miR-26a-5p", "hsa-miR-100-5p"), sp = "hsa", queryType = "predicted", predictPercentage = 10)
+#' rbiomirGS_mrnalist(mir = c("hsa-miR-26a-5p", "hsa-miR-100-5p"), sp = "hsa", queryType = "predicted", predictPercentage = 10)
 #' }
 #' @export
-rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
+rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
                                queryType = NULL, predictPercentage = 10,
                                url = "http://multimir.ucdenver.edu/cgi-bin/multimir.pl",
                                parallelComputing = FALSE, clusterType = "PSOCK"){
@@ -212,6 +212,12 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
       return(tmp)
     })
 
+    # write mRNA results into files
+    foreach(x = 1: length(out)) %do% {
+      write.csv(out[[x]], file = paste(names(out)[x], "_DE.csv", sep = ""),  na = "NA", row.names = FALSE)
+    }
+
+
   } else { # parallel computing
     # set up cpu core number
     n_cores <- detectCores() - 1
@@ -229,6 +235,11 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
           tmpfunc(m, n, mode = queryType, percentage = predictPercentage)}
       }
 
+      # write mRNA results into files
+      foreach(x = 1: length(out)) %dopar% {
+        write.csv(out[[x]], file = paste(names(out)[x], "_mRNA.csv", sep = ""),  na = "NA", row.names = FALSE)
+      }
+
     } else if (clusterType == "FORK"){ # macOS and Unix-like systmes only
       # message
       message(paste("searching ", db, " ...", sep = ""))
@@ -239,6 +250,11 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
         return(tmp)
       }, mc.cores = n_cores, mc.preschedule = FALSE)
 
+      # write mRNA results into files
+      mclapply(1:length(out), FUN = function(x){
+        write.csv(out[[x]], file = paste(names(out)[x], "_mRNA.csv", sep = ""), na = "NA", row.names = FALSE)
+      }, mc.cores = n_cores, mc.preschedule = FALSE)
+
     }
   }
 
@@ -246,5 +262,7 @@ rbiomirGS_mrnalist <- function(mir =  NULL, sp = "hsa",
   message("done")
 
   #### output
-  return(out)
+  assign(paste(objTitle, "_mrna_list", sep = ""), out, envir = .GlobalEnv)
+
 }
+
