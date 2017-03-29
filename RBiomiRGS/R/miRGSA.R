@@ -68,7 +68,7 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
   # j - single database
   # mode - queryType ("validated", "predicted")
   # percenetage - predictPercentage
-  tmpfunc <- function(i, j, mode = NULL, percentage = NULL){
+  tmpfunc_q <- function(i, j, mode = NULL, percentage = NULL){
 
     target.table <- "target"
     mirna.table <- "mirna"
@@ -199,16 +199,33 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
     return(tmpout)
   }
 
-  #### query
-  out <- vector(mode = "list", length = length(mir))
+  #### set up a temfunc for extract miRNA-mRNA entrez info for modelling from the output list
+  # x - the dataframe from the output list
+  # y - the output element (entrez ID) of the list
+  tmpfunc_lst <- function(x){
+    if (!is.null(x)){
+      y <- as.character(unique(x$target_entrez))
+      y[y == ""] <- NA
+      y <- y[!is.na(y)]
+    } else {
+      y <- NA
+    }
+    return(y)
+  }
+
+  #### query and output
+  out <- vector(mode = "list", length = length(mir)) # output list
   names(out) <- mir
+  out_entrez <- vector(mode = "list", length = length(mir)) # output entrez list for modelling
+  names(out_entrez) <- mir
 
   if (!parallelComputing){
 
+    ## populate output list and output
     out[] <- lapply(mir, function(m){
       tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
         message(paste("searching ", n, " for ", m, " ...", sep = ""))
-        tmpfunc(i = m, j = n, mode = queryType, percentage = predictPercentage)}
+        tmpfunc_q(i = m, j = n, mode = queryType, percentage = predictPercentage)}
       return(tmp)
     })
 
@@ -217,6 +234,9 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
       write.csv(out[[x]], file = paste(names(out)[x], "_DE.csv", sep = ""),  na = "NA", row.names = FALSE)
     }
 
+    ## popualte the entrez list
+    out_entrez[] <- foreach(o = 1:length(out)) %do% tmpfunc_lst(out[[o]])
+
 
   } else { # parallel computing
     # set up cpu core number
@@ -224,15 +244,16 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
 
 
     if (clusterType == "PSOCK"){ # for all OS systems
-      # set up cpu cluster for PSOCK
+      ## set up cpu cluster for PSOCK
       cl <- makeCluster(n_cores, type = clusterType, outfile = "")
       registerDoParallel(cl) # part of doParallel package
       on.exit(stopCluster(cl)) # close connect when exiting the function
 
+      ## populate the output list
       out[] <- foreach(m = mir, .packages = "foreach") %dopar% {
         tmpout <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
           message(paste("searching ", n, " for ", m, " ...", sep = ""))
-          tmpfunc(m, n, mode = queryType, percentage = predictPercentage)}
+          tmpfunc_q(m, n, mode = queryType, percentage = predictPercentage)}
       }
 
       # write mRNA results into files
@@ -240,13 +261,16 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
         write.csv(out[[x]], file = paste(names(out)[x], "_mRNA.csv", sep = ""),  na = "NA", row.names = FALSE)
       }
 
+      ## populate the entrez list
+      out_entrez[] <- foreach(o = 1:length(out)) %dopar% tmpfunc_lst(out[[o]])
+
     } else if (clusterType == "FORK"){ # macOS and Unix-like systmes only
-      # message
+      ## message
       message(paste("searching ", db, " ...", sep = ""))
 
-      # use mclapply from parallel pacakge for the FORK method
+      ## use mclapply from parallel pacakge for the FORK method to populate the ouput list
       out[] <- mclapply(mir, FUN = function(m){
-        tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% tmpfunc(m, n, mode = queryType, percentage = predictPercentage)
+        tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% tmpfunc_q(m, n, mode = queryType, percentage = predictPercentage)
         return(tmp)
       }, mc.cores = n_cores, mc.preschedule = FALSE)
 
@@ -255,6 +279,11 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
         write.csv(out[[x]], file = paste(names(out)[x], "_mRNA.csv", sep = ""), na = "NA", row.names = FALSE)
       }, mc.cores = n_cores, mc.preschedule = FALSE)
 
+      ## use mclapply to populate the entrez list
+      out_entrez[] <- mclapply(mir, FUN = function(m){
+        tmp <- foreach(o = 1:length(out)) %do% tmpfunc_lst(out[[o]])
+        return(tmp)
+      }, mc.cores = n_cores, mc.preschedule = FALSE)
     }
   }
 
@@ -262,7 +291,11 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
   message("done")
 
   #### output
+  ## the output list to the environment
   assign(paste(objTitle, "_mrna_list", sep = ""), out, envir = .GlobalEnv)
+
+  ## the entrez list ot the environment
+  assign(paste(objTitle, "_mrna_entrez_list", sep = ""), out_entrez, envir = .GlobalEnv)
 
 }
 
