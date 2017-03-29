@@ -19,6 +19,9 @@ Installation:
 
 Update log
 
+    0.1.2
+      - In addition to the environment, rbiomirGS_mrnalist() now outputs csv files of the mRNA resutls, as well as a hsa entrez list to the environment for modelling use
+
     0.1.1 (March.27.2017)
       - miRNA to mRNA function rbiomirGS_mrnalist() added.
 
