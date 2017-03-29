@@ -5,7 +5,7 @@
 \title{rbiomirGS_mrnalist}
 \usage{
 rbiomirGS_mrnalist(objTitle = "miRNA", mir = NULL, sp = "hsa",
-  queryType = NULL, predictPercentage = 10,
+  queryType = NULL, predictPercentage = 5,
   url = "http://multimir.ucdenver.edu/cgi-bin/multimir.pl",
   parallelComputing = FALSE, clusterType = "PSOCK")
 }
