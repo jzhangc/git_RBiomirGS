@@ -5,27 +5,29 @@
 
 #' @title rbiomirGS_mrnalist
 #'
-#' @description Obtain target mRNA list for miRNAs of interest. Resuls can be either predicted or validated. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.
+#' @description Obtain target mRNA list for miRNAs of interest. Resuls can be either predicted or validated. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.This function needs a internet connection.
 #' @param mir Input miRNAs vector.
 #' @param sp Species. Options are \code{"hsa"} (default), \code{"mmu"} and \code{"rno"}.
+#' @param addhsaEntrez When \code{sp = "mmu"} or \code{sp = "rno"}, users can set this argument to \code{TRUE} so that a new list containing hsa ortholog entrez ID will be exported to the environment. The function connects to the up-to-date \code{ensembl} databases.
 #' @param queryType Type of reuslts. Options are \code{"validated"} and \code{"predicted"}.
 #' @param predictPrecentage Set only if \code{queryType = "predicted"}. The percentage of the top scored mRNA predictions to return. Default is \code{5}.
-#' @param url The database host server: "http://multimir.ucdenver.edu/cgi-bin/multimir.pl"
+#' @param url The database host server: \code{"http://multimir.ucdenver.edu/cgi-bin/multimir.pl"}
 #' @param parallelComputing If to use parallel computing or not. Default is \code{FALSE}.
 #' @param clusterType Only set when \code{parallelComputing = TRUE}, the type for parallel cluster. Options are \code{"PSOCK"} (all operating systems) and \code{"FORK"} (macOS and Unix-like system only). Default is \code{"PSOCK"}.
-#' @return The function returns a \code{list} object with mRNA targets for the query miRNAs, as well as detailed resutls to the working directory as \code{csv} files.
+#' @return The function returns a \code{list} object with mRNA targets for the query miRNAs, as well as detailed resutls to the working directory as \code{csv} files. When \code{sp = "mmu"} or \code{sp = "rno"}, and \code{addhsaEntrez = TRUE}, a new list containing hsa ortholog entrez ID will be exported to the environment.
 #' @import doParallel
 #' @import foreach
 #' @importFrom XML readHTMLTable
 #' @importFrom RCurl postForm
 #' @importFrom parallel detectCores makeCluster stopCluster
+#' @importFrom biomaRt useMart getBM
 #' @examples
 #' \dontrun{
-#' rbiomirGS_mrnalist(mir = c("hsa-miR-26a-5p", "hsa-miR-100-5p"), sp = "hsa", queryType = "predicted", predictPercentage = 10)
+#' rbiomirGS_mrnalist(objTitle = "mmu_mirna", mir = c("mmu-miR-26a-5p", "mmu-miR-100-5p"), sp = "mmu", addhsaEntrez = TRUE, queryType = "predicted", predictPercentage = 10)
 #' }
 #' @export
-rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
-                               queryType = NULL, predictPercentage = 5,
+rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addhsaEntrez = FALSE,
+                               queryType = NULL, predictPercentage = 10,
                                url = "http://multimir.ucdenver.edu/cgi-bin/multimir.pl",
                                parallelComputing = FALSE, clusterType = "PSOCK"){
 
@@ -207,6 +209,7 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
       y <- as.character(unique(x$target_entrez))
       y[y == ""] <- NA
       y <- y[!is.na(y)]
+      y <- unique(y)
     } else {
       y <- NA
     }
@@ -218,6 +221,64 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
   names(out) <- mir
   out_entrez <- vector(mode = "list", length = length(mir)) # output entrez list for modelling
   names(out_entrez) <- mir
+
+
+  #### (optional) convert mmu/rno entrez ID to hsa entrez ID
+  if (addhsaEntrez){
+    # message
+    message(paste("Obtaining hsa orthologs information from ensembl databases for ", sp, "... May be slow depending on internet connectivity.", sep = ""))
+
+    # set the target species
+    if (sp == "mmu"){
+      martsp <- "mmusculus"
+    } else if (sp == "rno"){
+      martsp <- "rnorvegicus"
+    }
+
+    # extract hsa ortholog information
+    martsp_ensembl <- useMart("ensembl", dataset = paste0(martsp, "_gene_ensembl"))
+    attr <- c("ensembl_gene_id", "hsapiens_homolog_ensembl_gene")
+    martsp_hsa_orth <- getBM(attr, filters = "with_hsapiens_homolog", values = TRUE,
+                             mart = martsp_ensembl)
+    names(martsp_hsa_orth)[names(martsp_hsa_orth) == "ensembl_gene_id"] <- paste0(sp, "_ensembl_gene_id") # generalized term for change column names
+
+    # extract hsa entrezgene ID
+    hsa_ensembl <- useMart("ensembl", dataset = "hsapiens_gene_ensembl") # establish the human set
+    attr_hsa <- c("ensembl_gene_id", "entrezgene")
+    hsa_entrez <- getBM(attr_hsa, filters = "", values = TRUE,
+                        mart = hsa_ensembl)
+
+    # merge the two dataframes
+    martsp_hsa_orth_entrez <- merge(martsp_hsa_orth, hsa_entrez,
+                                    by.x = "hsapiens_homolog_ensembl_gene", by.y = "ensembl_gene_id",
+                                    all.x = TRUE)
+    names(martsp_hsa_orth_entrez)[names(martsp_hsa_orth_entrez) == "entrezgene"] <- "hsa_entrezgene"
+    martsp_hsa_orth_entrez <- martsp_hsa_orth_entrez[!duplicated(martsp_hsa_orth_entrez[, paste0(sp, "_ensembl_gene_id")]), ]
+
+
+    # message
+    message("...done!")
+
+    # tmpfunc
+    # d - input mmu/rno mRNA results dataframe
+    # h - output vector containing hsa entrez
+    tmpfunc_hsa_entrez <- function(d){
+      if (!is.null(d)){
+        h <- as.character(martsp_hsa_orth_entrez[martsp_hsa_orth_entrez[, paste0(sp, "_ensembl_gene_id")] %in% d$target_ensembl, "hsa_entrezgene"])
+        h[h == ""] <- NA
+        h <- h[!is.na(h)]
+        h <- unique(h)
+      } else {
+        h <- NA
+      }
+      return(h)
+    }
+
+
+    # output list
+    out_hsa_entrez <- vector(mode = "list", length = length(out_entrez))
+    names(out_hsa_entrez) <- names(out_entrez)
+  }
 
   if (!parallelComputing){
 
@@ -234,9 +295,13 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
       write.csv(out[[x]], file = paste(names(out)[x], "_DE.csv", sep = ""),  na = "NA", row.names = FALSE)
     }
 
-    ## popualte the entrez list
+    ## populate the entrez list
     out_entrez[] <- foreach(o = 1:length(out)) %do% tmpfunc_lst(out[[o]])
 
+    ## populate the mmu/rno to hsa entrez ID list
+    if (addhsaEntrez){
+      out_hsa_entrez[] <- foreach(p = 1:length(out)) %do% tmpfunc_hsa_entrez(out[[p]])
+    }
 
   } else { # parallel computing
     # set up cpu core number
@@ -264,6 +329,11 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
       ## populate the entrez list
       out_entrez[] <- foreach(o = 1:length(out)) %dopar% tmpfunc_lst(out[[o]])
 
+      ## populate the mmu/rno to hsa entrez ID list
+      if (addhsaEntrez){
+        out_hsa_entrez[] <- foreach(p = 1:length(out)) %dopar% tmpfunc_hsa_entrez(out[[p]])
+      }
+
     } else if (clusterType == "FORK"){ # macOS and Unix-like systmes only
       ## message
       message(paste("searching ", db, " ...", sep = ""))
@@ -284,18 +354,69 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa",
         tmp <- foreach(o = 1:length(out)) %do% tmpfunc_lst(out[[o]])
         return(tmp)
       }, mc.cores = n_cores, mc.preschedule = FALSE)
+
+      ## use mclapply to populate the hsa entrez ID list
+      if (addhsaEntrez){
+        out_hsa_entrez[] <- mclapply(mir, FUN = function(m){
+          tmp <- foreach(p = 1:length(out)) %do% tmpfunc_hsa_entrez(out[[p]])
+          return(tmp)
+        }, mc.cores = n_cores, mc.preschedule = FALSE)
+      }
     }
   }
 
   #### message
-  message("done")
+  if (addhsaEntrez){
+    message(paste("...done! And entrez ID for hsa orthologs added for ", sp, ".", sep = ""))
+  } else {
+    message("...done!")
+  }
 
   #### output
   ## the output list to the environment
   assign(paste(objTitle, "_mrna_list", sep = ""), out, envir = .GlobalEnv)
 
-  ## the entrez list ot the environment
+  ## the entrez list to the environment
   assign(paste(objTitle, "_mrna_entrez_list", sep = ""), out_entrez, envir = .GlobalEnv)
+
+  ## the hsa entrez list to the environment
+  if (addhsaEntrez){
+    assign(paste(objTitle, "_mrna_hsa_entrez_list", sep = ""), out_hsa_entrez, envir = .GlobalEnv)
+  }
 
 }
 
+
+#' @title rbiomirGS_gmt
+#'
+#' @description load \code{gmt} gene set files as lists
+#' @param file Input \code{gmt} file.
+#' @return The function loads the \code{gmt} gene set database file and returns a \code{list} object.
+#' @examples
+#' \dontrun{
+#' geneset <- rbiomirGS_gmt(file = "kegg.gmt")
+#' }
+#' @export
+rbiomirGS_gmt <- function(file){
+
+  # open connection
+  gmt <- file(file)
+
+  # check if the file can be read
+  filecheck <- try(suppressWarnings(open(gmt)), silent = TRUE)
+  if (class(filecheck) == "try-error") {
+    stop("Bad gmz file.")
+  } else {
+    tmpfile <- scan(gmt, what = "", quiet = T, sep = "\n")
+    tmplist <- strsplit(tmpfile, "\t")
+    names(tmplist) <- sapply(tmplist, '[[', 1) # extract the kegg pathway name as the names()
+    outlist <- lapply(tmplist, '[', -c(1, 2)) # remove the annotation info
+  }
+
+  # close connection
+  close(gmt)
+
+  # output
+  message(paste(length(outlist), " gene sets sucessfully loaded from gmz file.", sep = ""))
+  return(outlist)
+}

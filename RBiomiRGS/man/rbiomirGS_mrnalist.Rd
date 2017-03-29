@@ -5,7 +5,7 @@
 \title{rbiomirGS_mrnalist}
 \usage{
 rbiomirGS_mrnalist(objTitle = "miRNA", mir = NULL, sp = "hsa",
-  queryType = NULL, predictPercentage = 5,
+  addhsaEntrez = FALSE, queryType = NULL, predictPercentage = 10,
   url = "http://multimir.ucdenver.edu/cgi-bin/multimir.pl",
   parallelComputing = FALSE, clusterType = "PSOCK")
 }
@@ -14,9 +14,11 @@ rbiomirGS_mrnalist(objTitle = "miRNA", mir = NULL, sp = "hsa",
 
 \item{sp}{Species. Options are \code{"hsa"} (default), \code{"mmu"} and \code{"rno"}.}
 
+\item{addhsaEntrez}{When \code{sp = "mmu"} or \code{sp = "rno"}, users can set this argument to \code{TRUE} so that a new list containing hsa ortholog entrez ID will be exported to the environment. The function connects to the up-to-date \code{ensembl} databases.}
+
 \item{queryType}{Type of reuslts. Options are \code{"validated"} and \code{"predicted"}.}
 
-\item{url}{The database host server: "http://multimir.ucdenver.edu/cgi-bin/multimir.pl"}
+\item{url}{The database host server: \code{"http://multimir.ucdenver.edu/cgi-bin/multimir.pl"}}
 
 \item{parallelComputing}{If to use parallel computing or not. Default is \code{FALSE}.}
 
@@ -25,13 +27,13 @@ rbiomirGS_mrnalist(objTitle = "miRNA", mir = NULL, sp = "hsa",
 \item{predictPrecentage}{Set only if \code{queryType = "predicted"}. The percentage of the top scored mRNA predictions to return. Default is \code{5}.}
 }
 \value{
-The function returns a \code{list} object with mRNA targets for the query miRNAs, as well as detailed resutls to the working directory as \code{csv} files.
+The function returns a \code{list} object with mRNA targets for the query miRNAs, as well as detailed resutls to the working directory as \code{csv} files. When \code{sp = "mmu"} or \code{sp = "rno"}, and \code{addhsaEntrez = TRUE}, a new list containing hsa ortholog entrez ID will be exported to the environment.
 }
 \description{
-Obtain target mRNA list for miRNAs of interest. Resuls can be either predicted or validated. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.
+Obtain target mRNA list for miRNAs of interest. Resuls can be either predicted or validated. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.This function needs a internet connection.
 }
 \examples{
 \dontrun{
-rbiomirGS_mrnalist(mir = c("hsa-miR-26a-5p", "hsa-miR-100-5p"), sp = "hsa", queryType = "predicted", predictPercentage = 10)
+rbiomirGS_mrnalist(objTitle = "mmu_mirna", mir = c("mmu-miR-26a-5p", "mmu-miR-100-5p"), sp = "mmu", addhsaEntrez = TRUE, queryType = "predicted", predictPercentage = 10)
 }
 }

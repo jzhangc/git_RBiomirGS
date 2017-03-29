@@ -19,7 +19,12 @@ Installation:
 
 Update log
 
-    0.1.2 (March.28.2017)
+    0.1.3 (March.29.2017)
+      - rbiomirGS_mrnalist() now is able to connect to ensembl database to convert mmu/rno entrez gene IDs to the hsa ortholog entrez IDs
+      - rbiomirGS_gmt() function added to load gmt gene set files from ensembl databases
+      - Bug fixes
+
+    0.1.2
       - In addition to the environment, rbiomirGS_mrnalist() now outputs csv files of the mRNA resutls, as well as a hsa entrez list to the environment for modelling use
 
     0.1.1
