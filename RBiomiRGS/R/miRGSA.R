@@ -5,7 +5,7 @@
 
 #' @title rbiomirGS_mrnalist
 #'
-#' @description Obtain target mRNA list for miRNAs of interest. Resuls can be either predicted or validated. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.This function needs a internet connection.
+#' @description Obtain target mRNA list for miRNAs of interest. Results can either be predicted or validated miRNA-mRNA interactions. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.This function needs a internet connection.
 #' @param mir Input miRNAs vector.
 #' @param sp Species. Options are \code{"hsa"} (default), \code{"mmu"} and \code{"rno"}.
 #' @param addhsaEntrez When \code{sp = "mmu"} or \code{sp = "rno"}, users can set this argument to \code{TRUE} so that a new list containing hsa ortholog entrez ID will be exported to the environment. The function connects to the up-to-date \code{ensembl} databases.

@@ -30,7 +30,7 @@ rbiomirGS_mrnalist(objTitle = "miRNA", mir = NULL, sp = "hsa",
 The function returns a \code{list} object with mRNA targets for the query miRNAs, as well as detailed resutls to the working directory as \code{csv} files. When \code{sp = "mmu"} or \code{sp = "rno"}, and \code{addhsaEntrez = TRUE}, a new list containing hsa ortholog entrez ID will be exported to the environment.
 }
 \description{
-Obtain target mRNA list for miRNAs of interest. Resuls can be either predicted or validated. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.This function needs a internet connection.
+Obtain target mRNA list for miRNAs of interest. Results can either be predicted or validated miRNA-mRNA interactions. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.This function needs a internet connection.
 }
 \examples{
 \dontrun{
