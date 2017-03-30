@@ -405,7 +405,7 @@ rbiomirGS_gmt <- function(file){
   # check if the file can be read
   filecheck <- try(suppressWarnings(open(gmt)), silent = TRUE)
   if (class(filecheck) == "try-error") {
-    stop("Bad gmz file.")
+    stop("Bad gmt file.")
   } else {
     tmpfile <- scan(gmt, what = "", quiet = T, sep = "\n")
     tmplist <- strsplit(tmpfile, "\t")
