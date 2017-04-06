@@ -225,7 +225,7 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
 
   #### (optional) convert mmu/rno entrez ID to hsa entrez ID
   if (addhsaEntrez){
-    # message
+    # starting message
     cat(paste("Obtaining hsa orthologs information from ensembl databases for ", sp, "... May be slow depending on internet connectivity...", sep = ""))
 
     # set the target species
@@ -255,10 +255,6 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
     names(martsp_hsa_orth_entrez)[names(martsp_hsa_orth_entrez) == "entrezgene"] <- "hsa_entrezgene"
     martsp_hsa_orth_entrez <- martsp_hsa_orth_entrez[!duplicated(martsp_hsa_orth_entrez[, paste0(sp, "_ensembl_gene_id")]), ]
 
-
-    # message
-    cat("done!\n")
-
     # tmpfunc
     # d - input mmu/rno mRNA results dataframe
     # h - output vector containing hsa entrez
@@ -274,6 +270,8 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
       return(h)
     }
 
+    # ending message
+    cat("done!\n")
 
     # output list
     out_hsa_entrez <- vector(mode = "list", length = length(out_entrez))
@@ -284,16 +282,16 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
 
     ## populate output list and output
     out[] <- lapply(mir, function(m){
-      tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
+      tmpout <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
         cat(paste("searching ", n, " for ", m, " ...", sep = ""))
-        tmpfunc_q(i = m, j = n, mode = queryType, percentage = predictPercentage)
-        cat("done!\n")}
-      return(tmp)
+        tmp <- tmpfunc_q(i = m, j = n, mode = queryType, percentage = predictPercentage)
+        cat("done!\n")
+        return(tmp)}
     })
 
     # write mRNA results into files
     foreach(x = 1: length(out)) %do% {
-      write.csv(out[[x]], file = paste(names(out)[x], "_DE.csv", sep = ""),  na = "NA", row.names = FALSE)
+      write.csv(out[[x]], file = paste(names(out)[x], "_mRNA.csv", sep = ""),  na = "NA", row.names = FALSE)
     }
 
     ## populate the entrez list
@@ -308,7 +306,6 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
     # set up cpu core number
     n_cores <- detectCores() - 1
 
-
     if (clusterType == "PSOCK"){ # for all OS systems
       ## set up cpu cluster for PSOCK
       cl <- makeCluster(n_cores, type = clusterType, outfile = "")
@@ -319,8 +316,9 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
       out[] <- foreach(m = mir, .packages = "foreach") %dopar% {
         tmpout <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
           cat(paste("searching ", n, " for ", m, " ...", sep = ""))
-          tmpfunc_q(m, n, mode = queryType, percentage = predictPercentage)
-          cat("done!\n")}
+          tmp <- tmpfunc_q(i = m, j = n, mode = queryType, percentage = predictPercentage)
+          cat("done!\n")
+          return(tmp)}
       }
 
       # write mRNA results into files
