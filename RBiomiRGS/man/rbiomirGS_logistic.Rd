@@ -10,7 +10,7 @@ rbiomirGS_logistic(objTitle = "mirna_mrna", mirna_DE,
   p.adj = "fdr", ..., parallelComputing = FALSE, clusterType = "PSOCK")
 }
 \arguments{
-\item{objTitle}{Output \copde{csv} file name prefix.}
+\item{objTitle}{Output \code{csv} file name prefix.}
 
 \item{mirna_DE}{DE list of miRNAs of interest. This is a \code{dataframe} object for now.}
 
@@ -44,6 +44,11 @@ Logistic regression-based gene set analysis using measured miRNA p value and fol
 }
 \examples{
 \dontrun{
-geneset <- rbiomirGS_gmt(file = "kegg.gmt")
+geneset <- rbiomirGS_logistic(objTitle = "mirna_mrna",
+                              mirna_DE = tstdfm2, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "logP",
+                              mrnalist = hsa_mrna_entrez_list_woNA, mrna_Weight = NULL,
+                              gs_file = "~/OneDrive/my papers/my papers/potential_DRDC_paper 2 (diving)/data/kegg.v5.2.entrez.gmt",
+                              optim_method = "L-BFGS-B", p.adj = "fdr",
+                              parallelComputing = FALSE, clusterType = "PSOCK")
 }
 }

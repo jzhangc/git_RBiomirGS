@@ -35,7 +35,7 @@ rbiomirGS_gmt <- function(file){
 #' @title rbiomirGS_logistic
 #'
 #' @description Logistic regression-based gene set analysis using measured miRNA p value and fold change,  with the option of custom-setting parameter optimization algorithms.
-#' @param objTitle Output \copde{csv} file name prefix.
+#' @param objTitle Output \code{csv} file name prefix.
 #' @param mirna_DE DE list of miRNAs of interest. This is a \code{dataframe} object for now.
 #' @param var_mirnaName Variable name for miRNA names in the DE list. Default is \code{"miRNA"}.
 #' @param var_mirnaFC Variable name for log transformed miRNA fold change (logFC) in the DE list. Default is \code{"logFC"}.
