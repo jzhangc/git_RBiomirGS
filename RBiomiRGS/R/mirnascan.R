@@ -19,7 +19,7 @@
 #' @import foreach
 #' @importFrom XML readHTMLTable
 #' @importFrom RCurl postForm
-#' @importFrom parallel detectCores makeCluster stopCluster
+#' @importFrom parallel detectCores makeCluster stopCluster mclapply
 #' @importFrom biomaRt useMart getBM
 #' @examples
 #' \dontrun{

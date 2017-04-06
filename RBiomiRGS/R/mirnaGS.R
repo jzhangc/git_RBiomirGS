@@ -51,7 +51,7 @@ rbiomirGS_gmt <- function(file){
 #' @return A \code{data.frame} object containing GS results to to the environment, as well as a \code{csv} to the working directory. A \code{txt} file containing the iteration information will be generated if \code{opti_method = "L-BFGS-B" or "BFGS"}.
 #' @import doParallel
 #' @import foreach
-#' @importFrom parallel detectCores makeCluster stopCluster
+#' @importFrom parallel detectCores makeCluster stopCluster mclapply
 #' @examples
 #' \dontrun{
 #' geneset <- rbiomirGS_logistic(objTitle = "mirna_mrna",
@@ -327,7 +327,7 @@ rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
   }
 
   ## p value adjustment
-  out <- data.frame(GS = rownames(res), res, adj.P.Val = p.adjust(res[, "p.value"], method = p.adj))
+  out <- data.frame(GS = rownames(res), res, adj.p.val = p.adjust(res[, "p.value"], method = p.adj))
 
   ## output
   write.csv(out, file = paste(objTitle, "_GS.csv", sep = ""), na = "NA", row.names = FALSE)
