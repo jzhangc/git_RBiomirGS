@@ -54,7 +54,13 @@ rbiomirGS_gmt <- function(file){
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @examples
 #' \dontrun{
-#' geneset <- rbiomirGS_gmt(file = "kegg.gmt")
+#' geneset <- rbiomirGS_logistic(objTitle = "mirna_mrna",
+#'                               mirna_DE = tstdfm2, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "logP",
+#'                               mrnalist = hsa_mrna_entrez_list_woNA, mrna_Weight = NULL,
+#'                               gs_file = "~/OneDrive/my papers/my papers/potential_DRDC_paper 2 (diving)/data/kegg.v5.2.entrez.gmt",
+#'                               optim_method = "L-BFGS-B", p.adj = "fdr",
+#'                               parallelComputing = FALSE, clusterType = "PSOCK")
+
 #' }
 #' @export
 
