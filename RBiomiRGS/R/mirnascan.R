@@ -385,38 +385,3 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   }
 
 }
-
-
-#' @title rbiomirGS_gmt
-#'
-#' @description load \code{gmt} gene set files as lists
-#' @param file Input \code{gmt} file.
-#' @return The function loads the \code{gmt} gene set database file and returns a \code{list} object.
-#' @examples
-#' \dontrun{
-#' geneset <- rbiomirGS_gmt(file = "kegg.gmt")
-#' }
-#' @export
-rbiomirGS_gmt <- function(file){
-
-  # open connection
-  gmt <- file(file)
-
-  # check if the file can be read
-  filecheck <- try(suppressWarnings(open(gmt)), silent = TRUE)
-  if (class(filecheck) == "try-error") {
-    stop("Bad gmt file.")
-  } else {
-    tmpfile <- scan(gmt, what = "", quiet = T, sep = "\n")
-    tmplist <- strsplit(tmpfile, "\t")
-    names(tmplist) <- sapply(tmplist, '[[', 1) # extract the kegg pathway name as the names()
-    outlist <- lapply(tmplist, '[', -c(1, 2)) # remove the annotation info
-  }
-
-  # close connection
-  close(gmt)
-
-  # output
-  message(paste(length(outlist), " gene sets sucessfully loaded from gmz file.", sep = ""))
-  return(outlist)
-}
