@@ -226,7 +226,7 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   #### (optional) convert mmu/rno entrez ID to hsa entrez ID
   if (addhsaEntrez){
     # message
-    message(paste("Obtaining hsa orthologs information from ensembl databases for ", sp, "... May be slow depending on internet connectivity.", sep = ""))
+    cat(paste("Obtaining hsa orthologs information from ensembl databases for ", sp, "... May be slow depending on internet connectivity...", sep = ""))
 
     # set the target species
     if (sp == "mmu"){
@@ -257,7 +257,7 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
 
 
     # message
-    message("...done!")
+    cat("done!\n")
 
     # tmpfunc
     # d - input mmu/rno mRNA results dataframe
@@ -285,8 +285,9 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
     ## populate output list and output
     out[] <- lapply(mir, function(m){
       tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
-        message(paste("searching ", n, " for ", m, " ...", sep = ""))
-        tmpfunc_q(i = m, j = n, mode = queryType, percentage = predictPercentage)}
+        cat(paste("searching ", n, " for ", m, " ...", sep = ""))
+        tmpfunc_q(i = m, j = n, mode = queryType, percentage = predictPercentage)
+        cat("done!\n")}
       return(tmp)
     })
 
@@ -317,8 +318,9 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
       ## populate the output list
       out[] <- foreach(m = mir, .packages = "foreach") %dopar% {
         tmpout <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
-          message(paste("searching ", n, " for ", m, " ...", sep = ""))
-          tmpfunc_q(m, n, mode = queryType, percentage = predictPercentage)}
+          cat(paste("searching ", n, " for ", m, " ...", sep = ""))
+          tmpfunc_q(m, n, mode = queryType, percentage = predictPercentage)
+          cat("done!\n")}
       }
 
       # write mRNA results into files
@@ -336,13 +338,16 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
 
     } else if (clusterType == "FORK"){ # macOS and Unix-like systmes only
       ## message
-      message(paste("searching ", db, " ...", sep = ""))
+      cat(paste("searching ", db, " ...", sep = ""))
 
       ## use mclapply from parallel pacakge for the FORK method to populate the ouput list
       out[] <- mclapply(mir, FUN = function(m){
         tmp <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% tmpfunc_q(m, n, mode = queryType, percentage = predictPercentage)
         return(tmp)
       }, mc.cores = n_cores, mc.preschedule = FALSE)
+
+      ## message
+      cat("done!\n")
 
       # write mRNA results into files
       mclapply(1:length(out), FUN = function(x){
@@ -367,9 +372,9 @@ rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
 
   #### message
   if (addhsaEntrez){
-    message(paste("...done! And entrez ID for hsa orthologs added for ", sp, ".", sep = ""))
+    message(paste("...all done! And entrez ID for hsa orthologs added for ", sp, ".", sep = ""))
   } else {
-    message("...done!")
+    message("...all done!")
   }
 
   #### output

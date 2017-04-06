@@ -4,21 +4,22 @@
 \alias{rbiomirGS_logistic}
 \title{rbiomirGS_logistic}
 \usage{
-rbiomirGS_logistic(objTitle = "mirna_mrna", mirna_DE,
+rbiomirGS_logistic(objTitle = "mirna_mrna", mirna_DE = NULL,
   var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "p.value",
-  mrnalist, mrna_Weight = NULL, gs_file = NULL, optim_method = "L-BFGS-B",
-  p.adj = "fdr", ..., parallelComputing = FALSE, clusterType = "PSOCK")
+  mrnalist = NULL, mrna_Weight = NULL, gs_file = NULL,
+  optim_method = "L-BFGS-B", p.adj = "fdr", ...,
+  parallelComputing = FALSE, clusterType = "PSOCK")
 }
 \arguments{
 \item{objTitle}{Output \code{csv} file name prefix.}
 
-\item{mirna_DE}{DE list of miRNAs of interest. This is a \code{dataframe} object for now.}
+\item{mirna_DE}{DE list of miRNAs of interest. This can be a \code{data.frame}, \code{matrix} or \code{list} object.}
 
 \item{var_mirnaName}{Variable name for miRNA names in the DE list. Default is \code{"miRNA"}.}
 
 \item{var_mirnaFC}{Variable name for log transformed miRNA fold change (logFC) in the DE list. Default is \code{"logFC"}.}
 
-\item{var_mirnaP}{Variable name for miRNA p value in the DE list. Default is \code{"p.value"}.}
+\item{var_mirnaP}{Variable name for miRNA p value in the DE list. Default is \code{"p.value"}. Note that the value will be -log10 transformed before calculating the miRNA score.}
 
 \item{mrnalist}{List containing the mRNA targets for the miRNAs of interest. This is a \code{list} object and can be obtained from \code{\link{rbiomirGS_mrnalist}} function.}
 
@@ -26,9 +27,9 @@ rbiomirGS_logistic(objTitle = "mirna_mrna", mirna_DE,
 
 \item{gs_file}{Input \code{gmt} for gene set, and can be obtained from \code{ensembl} databases.}
 
-\item{optim_method}{The parameter optimization method for the logistic regression model. Options are \code{"L-BFGS-B"}, \code{"BFGS"}, \code{"CG"}, \code{"SANN"}, and \code{"Brent"}. Default is \code{"L-BFGS-B"}.}
+\item{optim_method}{The parameter optimization method for the logistic regression model. Options are \code{"L-BFGS-B"}, \code{"BFGS"}, and \code{"IWLS"}. Default is \code{"L-BFGS-B"}.}
 
-\item{p.adj}{P value adjustment methods. Options are \code{"holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none""}. Default is \code{"fdr"}.}
+\item{p.adj}{P value adjustment methods. Options are \code{"holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"}. Default is \code{"fdr"}.}
 
 \item{...}{Addtional arguments for \code{optim} function.}
 
@@ -37,7 +38,7 @@ rbiomirGS_logistic(objTitle = "mirna_mrna", mirna_DE,
 \item{clusterType}{Only set when \code{parallelComputing = TRUE}, the type for parallel cluster. Options are \code{"PSOCK"} (all operating systems) and \code{"FORK"} (macOS and Unix-like system only). Default is \code{"PSOCK"}.}
 }
 \value{
-A \code{csv} containing GS enrichment analysis results.
+A \code{data.frame} object containing GS results to to the environment, as well as a \code{csv} to the working directory. A \code{txt} file containing the iteration information will be generated if \code{opti_method = "L-BFGS-B" or "BFGS"}.
 }
 \description{
 Logistic regression-based gene set analysis using measured miRNA p value and fold change,  with the option of custom-setting parameter optimization algorithms.
