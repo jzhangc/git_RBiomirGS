@@ -63,7 +63,6 @@ rbiomirGS_gmt <- function(file){
 
 #' }
 #' @export
-
 rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
                                mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "p.value",
                                mrnalist = NULL, mrna_Weight = NULL,
