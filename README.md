@@ -1,5 +1,5 @@
 # RBioMiRGS
-Simple to use package for both microarray and RNAseq data analysis (limma based)
+Simple to use package for miRNA gene set analysis, with miRNA-mRNA interaction searching and human mRNA orthologs conversion functionalites.
 
 Installation:
 
