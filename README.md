@@ -19,7 +19,11 @@ Installation:
 
 Update log
 
-    0.1.4 - 0.1.5 (April.6.2017)
+    0.1.6 (May.4.2017)
+      - Prepartion for SVM function
+      - Bug fixes
+
+    0.1.4 - 0.1.5 
       - logistic regression-based miRNA gene set analysis function rbiomirGS_logistic() added, featuring multiple parameter optimization algorithms as well as parallel computing
       - many "quality of life" features added for both rbiomirGS_logistic() and rbiomirGS_mrnalist() function
       - codes optmized to reduce redundancy 

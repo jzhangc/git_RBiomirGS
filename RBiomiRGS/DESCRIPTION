@@ -1,7 +1,7 @@
 Package: RBiomiRGS
 Type: Package
 Title: Simple to use package for machine learning-based miRNA pathway analysis.
-Version: 0.1.5
+Version: 0.1.6
 Author: Jing Zhang
 Maintainer: Jing Zhang <jzhangcad@gmail.com>
 Description: The package uses logistic regression and other classifiers (neural network, CART) for miRNA gene set anlaysis.

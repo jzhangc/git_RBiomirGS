@@ -17,10 +17,10 @@
 #' @return The function returns a \code{list} object with mRNA targets for the query miRNAs, as well as detailed resutls to the working directory as \code{csv} files. When \code{sp = "mmu"} or \code{sp = "rno"}, and \code{addhsaEntrez = TRUE}, a new list containing hsa ortholog entrez ID will be exported to the environment.
 #' @import doParallel
 #' @import foreach
+#' @import biomaRt
 #' @importFrom XML readHTMLTable
 #' @importFrom RCurl postForm
 #' @importFrom parallel detectCores makeCluster stopCluster mclapply
-#' @importFrom biomaRt useMart getBM
 #' @examples
 #' \dontrun{
 #' rbiomirGS_mrnalist(objTitle = "mmu_mirna", mir = c("mmu-miR-26a-5p", "mmu-miR-100-5p"), sp = "mmu", addhsaEntrez = TRUE, queryType = "predicted", predictPercentage = 10)
