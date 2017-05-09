@@ -259,7 +259,7 @@ rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
 
   ## logistic regression
   # set up variables
-  X <- cbind(rep(1, times = length(genes)), mrna.score) # set up vairable
+  X <- cbind(rep(1, times = length(mrna)), mrna.score) # set up vairable
   altX <- X[, 2] # this for automatically setting the initial values for the parameter
 
   ## modelling/optimization
