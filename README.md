@@ -19,7 +19,7 @@ Installation:
 
 Update log
 
-    0.1.6 (May.4.2017)
+    0.1.6 - 0.1.7 (May.9.2017)
       - Prepartion for SVM function
       - Bug fixes
 

@@ -4,14 +4,16 @@
 \alias{rbiomirGS_logistic}
 \title{rbiomirGS_logistic}
 \usage{
-rbiomirGS_logistic(objTitle = "mirna_mrna", mirna_DE = NULL,
-  var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "p.value",
-  mrnalist = NULL, mrna_Weight = NULL, gs_file = NULL,
-  optim_method = "L-BFGS-B", p.adj = "fdr", ...,
+rbiomirGS_logistic(objTitle = "mirna_mrna", defile = NULL,
+  mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "logFC",
+  var_mirnaP = "p.value", mrnalist = NULL, mrna_Weight = NULL,
+  gs_file = NULL, optim_method = "L-BFGS-B", p.adj = "fdr", ...,
   parallelComputing = FALSE, clusterType = "PSOCK")
 }
 \arguments{
 \item{objTitle}{Output \code{csv} file name prefix.}
+
+\item{defile}{The input \code{csv} file containing miRNA list and DE resutls.}
 
 \item{mirna_DE}{DE list of miRNAs of interest. This can be a \code{data.frame}, \code{matrix} or \code{list} object.}
 
@@ -46,7 +48,7 @@ Logistic regression-based gene set analysis using measured miRNA p value and fol
 \examples{
 \dontrun{
 geneset <- rbiomirGS_logistic(objTitle = "mirna_mrna",
-                              mirna_DE = tstdfm2, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "logP",
+                              mirna_DE = tstdfm2, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "pvalue",
                               mrnalist = hsa_mrna_entrez_list_woNA, mrna_Weight = NULL,
                               gs_file = "~/OneDrive/my papers/my papers/potential_DRDC_paper 2 (diving)/data/kegg.v5.2.entrez.gmt",
                               optim_method = "L-BFGS-B", p.adj = "fdr",

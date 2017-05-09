@@ -36,6 +36,7 @@ rbiomirGS_gmt <- function(file){
 #'
 #' @description Logistic regression-based gene set analysis using measured miRNA p value and fold change,  with the option of custom-setting parameter optimization algorithms.
 #' @param objTitle Output \code{csv} file name prefix.
+#' @param defile The input \code{csv} file containing miRNA list and DE resutls.
 #' @param mirna_DE DE list of miRNAs of interest. This can be a \code{data.frame}, \code{matrix} or \code{list} object.
 #' @param var_mirnaName Variable name for miRNA names in the DE list. Default is \code{"miRNA"}.
 #' @param var_mirnaFC Variable name for log transformed miRNA fold change (logFC) in the DE list. Default is \code{"logFC"}.
@@ -55,7 +56,7 @@ rbiomirGS_gmt <- function(file){
 #' @examples
 #' \dontrun{
 #' geneset <- rbiomirGS_logistic(objTitle = "mirna_mrna",
-#'                               mirna_DE = tstdfm2, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "logP",
+#'                               mirna_DE = tstdfm2, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "pvalue",
 #'                               mrnalist = hsa_mrna_entrez_list_woNA, mrna_Weight = NULL,
 #'                               gs_file = "~/OneDrive/my papers/my papers/potential_DRDC_paper 2 (diving)/data/kegg.v5.2.entrez.gmt",
 #'                               optim_method = "L-BFGS-B", p.adj = "fdr",
@@ -64,6 +65,7 @@ rbiomirGS_gmt <- function(file){
 #' }
 #' @export
 rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
+                               defile = NULL,
                                mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "p.value",
                                mrnalist = NULL, mrna_Weight = NULL,
                                gs_file = NULL,
@@ -85,22 +87,27 @@ rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
   }
 
   #### calculate the miRNA score
-  if (class(mirna_DE) == "data.frame"){
-    mirna.DE <- mirna_DE
+  if (is.null(defile)){
+    if (class(mirna_DE) == "data.frame"){
+      mirna.DE <- mirna_DE
+      mirna.score <- sign(mirna.DE[, var_mirnaFC]) * (-log10(mirna.DE[, var_mirnaP]))
+      names(mirna.score) <- mirna.DE[, var_mirnaName]
+    } else if (class(mirna_DE == "matrix")){
+      mirna.DE <- mirna_DE
+      mirna.score <- sign(as.numeric(mirna.DE[, var_mirnaFC])) * (-log10(as.numeric(mirna.DE[, var_mirnaP])))
+      names(mirna.score) <- mirna.DE[, var_mirnaName]
+    } else if (class(mirna_DE) == "list"){
+      mirna.DE <- mirna_DE
+      mirna.score <- sign(mirna.DE[[var_mirnaFC]]) * (-log10(mirna.DE[[var_mirnaP]]))
+      names(mirna.score) <- mirna.DE[[var_mirnaName]]
+    } else {
+      stop("Currently, the input only supports dataframe, list or matrix")
+    }
+  } else {
+    mirna.DE <- read.csv(file = defile, header = TRUE, stringsAsFactors = FALSE)
     mirna.score <- sign(mirna.DE[, var_mirnaFC]) * (-log10(mirna.DE[, var_mirnaP]))
     names(mirna.score) <- mirna.DE[, var_mirnaName]
-  } else if (class(mirna_DE == "matrix")){
-    mirna.DE <- mirna_DE
-    mirna.score <- sign(as.numeric(mirna.DE[, var_mirnaFC])) * (-log10(as.numeric(mirna.DE[, var_mirnaP])))
-    names(mirna.score) <- mirna.DE[, var_mirnaName]
-  } else if (class(mirna_DE) == "list"){
-    mirna.DE <- mirna_DE
-    mirna.score <- sign(mirna.DE[[var_mirnaFC]]) * (-log10(mirna.DE[[var_mirnaP]]))
-    names(mirna.score) <- mirna.DE[[var_mirnaName]]
-  } else {
-    stop("Currently, the input only supports dataframe, list or matrix")
   }
-
 
   #### prepare the mRNA list
   mrna.raw.list <- mrnalist[!is.na(mrnalist)] # remove the NAs
@@ -175,6 +182,7 @@ rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
       ## output
       tmp <- c(model$converged, loss, genes.tested, model.smry$coefficients[2, ])
     }
+
   } else { # set up tmpfuncs for optm methods
     # logit (vectorized function, X is a matrix aand vTh is a vector)
     vlogit <- function(mX, vTh){
@@ -266,6 +274,7 @@ rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
   # set up result matrix
   if (optim_method == "IWLS"){
     res <- matrix(NA, nrow = length(blocks), ncol = 7)
+
   } else {
     res <- matrix(NA, nrow = length(blocks), ncol = 6)
   }
@@ -320,13 +329,16 @@ rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
 
   if (optim_method == "IWLS"){
     colnames(res) <- c("converged", "loss", "gene.tested", "coef.", "std.err.", "t-value", "p.value")
-
   } else {
     colnames(res) <- c("gene.tested", "coef.", "std.err.", "loss", "z-score", "p.value") # see if to add "converged"
   }
 
   ## p value adjustment
   out <- data.frame(GS = rownames(res), res, adj.p.val = p.adjust(res[, "p.value"], method = p.adj))
+
+  if (optim_method == "IWLS") {
+    out$converged <- factor(out$converged, levels = c(1, 0), labels = c("Y", "N"))
+  }
 
   ## output
   write.csv(out, file = paste(objTitle, "_GS.csv", sep = ""), na = "NA", row.names = FALSE)
