@@ -2,7 +2,7 @@
 
 export(rbiomirGS_gmt)
 export(rbiomirGS_logistic)
-export(rbiomirGS_mrnalist)
+export(rbiomirGS_mrnascan)
 import(biomaRt)
 import(doParallel)
 import(foreach)

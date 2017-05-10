@@ -3,7 +3,7 @@
   return(TRUE)
 }
 
-#' @title rbiomirGS_mrnalist
+#' @title rbiomirGS_mrnascan
 #'
 #' @description Obtain target mRNA list for miRNAs of interest. Results can either be predicted or validated miRNA-mRNA interactions. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.This function needs a internet connection.
 #' @param mir Input miRNAs vector.
@@ -23,10 +23,10 @@
 #' @importFrom parallel detectCores makeCluster stopCluster mclapply
 #' @examples
 #' \dontrun{
-#' rbiomirGS_mrnalist(objTitle = "mmu_mirna", mir = c("mmu-miR-26a-5p", "mmu-miR-100-5p"), sp = "mmu", addhsaEntrez = TRUE, queryType = "predicted", predictPercentage = 10)
+#' rbiomirGS_mrnascan(objTitle = "mmu_mirna", mir = c("mmu-miR-26a-5p", "mmu-miR-100-5p"), sp = "mmu", addhsaEntrez = TRUE, queryType = "predicted", predictPercentage = 10)
 #' }
 #' @export
-rbiomirGS_mrnalist <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addhsaEntrez = FALSE,
+rbiomirGS_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addhsaEntrez = FALSE,
                                queryType = NULL, predictPercentage = 10,
                                url = "http://multimir.ucdenver.edu/cgi-bin/multimir.pl",
                                parallelComputing = FALSE, clusterType = "PSOCK"){
