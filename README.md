@@ -1,4 +1,4 @@
-# RBioMiRGS
+# RBiomirGS
 Simple to use package for miRNA gene set analysis, with miRNA-mRNA interaction searching and human mRNA orthologs conversion functionalites.
 
 Installation:
@@ -19,8 +19,16 @@ Installation:
 
 Update log
 
+    0.1.7 (May.11.2017)
+      - Preparation for the plotting module
+      - Description file updated
+      - Package name changed to RBiomirGS
+      - zzz.R file added
+      - Function names are now all lower cases
+      - mRNA scoring modified with reversed sign, so that positive value means actiation and negative means inhibition. Same goes with the parameters obtained from logistic regression
+      - Bug fixes
+
     0.1.6 - 0.1.7 (May.9.2017)
-      - Prepartion for SVM function
       - Bug fixes
 
     0.1.4 - 0.1.5 

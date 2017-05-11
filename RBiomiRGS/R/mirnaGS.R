@@ -1,4 +1,4 @@
-#' @title rbiomirGS_gmt
+#' @title rbiomirgs_gmt
 #'
 #' @description load \code{gmt} gene set files as lists
 #' @param file Input \code{gmt} file.
@@ -8,7 +8,7 @@
 #' geneset <- rbiomirGS_gmt(file = "kegg.gmt")
 #' }
 #' @export
-rbiomirGS_gmt <- function(file){
+rbiomirgs_gmt <- function(file){
 
   # open connection
   gmt <- file(file)
@@ -32,7 +32,7 @@ rbiomirGS_gmt <- function(file){
   return(outlist)
 }
 
-#' @title rbiomirGS_logistic
+#' @title rbiomirgs_logistic
 #'
 #' @description Logistic regression-based gene set analysis using measured miRNA p value and fold change,  with the option of custom-setting parameter optimization algorithms.
 #' @param objTitle Output \code{csv} file name prefix.
@@ -55,7 +55,7 @@ rbiomirGS_gmt <- function(file){
 #' @importFrom parallel detectCores makeCluster stopCluster mclapply
 #' @examples
 #' \dontrun{
-#' geneset <- rbiomirGS_logistic(objTitle = "mirna_mrna",
+#' geneset <- rbiomirgs_logistic(objTitle = "mirna_mrna",
 #'                               mirna_DE = tstdfm2, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "pvalue",
 #'                               mrnalist = hsa_mrna_entrez_list_woNA, mrna_Weight = NULL,
 #'                               gs_file = "~/OneDrive/my papers/my papers/potential_DRDC_paper 2 (diving)/data/kegg.v5.2.entrez.gmt",
@@ -64,7 +64,7 @@ rbiomirGS_gmt <- function(file){
 
 #' }
 #' @export
-rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
+rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
                                defile = NULL,
                                mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "p.value",
                                mrnalist = NULL, mrna_Weight = NULL,
@@ -134,9 +134,9 @@ rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
   colnames(mat) <- mirna.working
 
   if (is.null(mrna_Weight)){
-    mrna.score <- rowSums(mat)
+    mrna.score <- -rowSums(mat)
   } else {
-    mrna.score <- mrna_Weight * rowSums(mat)
+    mrna.score <- mrna_Weight * (-rowSums(mat))
   }
 
   names(mrna.score) <- rownames(mat)
@@ -144,7 +144,7 @@ rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
 
 
   #### set up GS
-  GS <- rbiomirGS_gmt(file = gs_file)
+  GS <- rbiomirgs_gmt(file = gs_file)
   blocks <- names(GS) # extract GS names
 
 
@@ -166,7 +166,7 @@ rbiomirGS_logistic <- function(objTitle = "mirna_mrna",
 
 
       # message
-      cat(paste("Asessing gene set: ", i, "...", sep = ""))
+      cat(paste("Assessing gene set: ", i, "...", sep = ""))
 
       model <- glm.fit(x = X, y = B, family = quasibinomial())
       model.smry <- summary.glm(model)
