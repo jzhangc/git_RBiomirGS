@@ -236,7 +236,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
       startv <- startvalue.model$coefficients
 
       # message
-      cat(paste("Asessing gene set: ", i, "...", sep = ""))
+      cat(paste("Assessing gene set: ", i, "...", sep = ""))
 
       # modelling/optimization
       sink(file = paste(objTitle, "_", optim_method, "_log.txt", sep = ""), append = TRUE) # dump iteration messages
@@ -310,7 +310,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
     } else { # macOS and Unix-like systmes only
 
       # message
-      cat("Asessing gene sets...")
+      cat("Assessing gene sets...")
 
       if (optim_method == "IWLS"){
         res <- as.data.frame(do.call(rbind, mclapply(blocks, FUN = tmpfunc_IWLS, mc.cores = n_cores, mc.preschedule = FALSE)))
