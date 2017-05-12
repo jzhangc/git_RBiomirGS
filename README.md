@@ -19,7 +19,7 @@ Installation:
 
 Update log
 
-    0.1.7 (May.11.2017)
+    0.1.8 (May.11.2017)
       - Preparation for the plotting module
       - Description file updated
       - Package name changed to RBiomirGS
