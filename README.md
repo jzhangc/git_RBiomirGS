@@ -19,16 +19,21 @@ Installation:
 
 Update log
 
-    0.1.8 (May.11.2017)
+    0.2.0 (May.12.2017)
+      - Package name changed to RBiomirGS
+      - Plot functions added: rbiomirgs_volcano(), rbiomirgs_histogram()
+      - Adjustments on the variable names for logitstic regression resutls
+      - mRNA scoring modified with reversed sign, so that positive value means actiation and negative means inhibition. Same goes with the parameters obtained from logistic regression
+      - Function names are now all lower cases
+      - Bug fixes
+    
+    0.1.8
       - Preparation for the plotting module
       - Description file updated
-      - Package name changed to RBiomirGS
       - zzz.R file added
-      - Function names are now all lower cases
-      - mRNA scoring modified with reversed sign, so that positive value means actiation and negative means inhibition. Same goes with the parameters obtained from logistic regression
       - Bug fixes
 
-    0.1.6 - 0.1.7 (May.9.2017)
+    0.1.6 - 0.1.7
       - Bug fixes
 
     0.1.4 - 0.1.5 

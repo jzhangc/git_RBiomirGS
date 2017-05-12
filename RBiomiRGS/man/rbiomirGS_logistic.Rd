@@ -23,7 +23,7 @@ rbiomirgs_logistic(objTitle = "mirna_mrna", defile = NULL,
 
 \item{var_mirnaP}{Variable name for miRNA p value in the DE list. Default is \code{"p.value"}. Note that the value will be -log10 transformed before calculating the miRNA score.}
 
-\item{mrnalist}{List containing the mRNA targets for the miRNAs of interest. This is a \code{list} object and can be obtained from \code{\link{rbiomirGS_mrnalist}} function.}
+\item{mrnalist}{List containing the mRNA targets for the miRNAs of interest. This is a \code{list} object and can be obtained from \code{\link{rbiomirgs_mrnascan}} function.}
 
 \item{mrna_Weight}{A vector weight for the miRNA-mRNA interaction. Default is \code{NULL}.}
 

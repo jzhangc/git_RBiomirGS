@@ -41,7 +41,7 @@ rbiomirgs_gmt <- function(file){
 #' @param var_mirnaName Variable name for miRNA names in the DE list. Default is \code{"miRNA"}.
 #' @param var_mirnaFC Variable name for log transformed miRNA fold change (logFC) in the DE list. Default is \code{"logFC"}.
 #' @param var_mirnaP Variable name for miRNA p value in the DE list. Default is \code{"p.value"}. Note that the value will be -log10 transformed before calculating the miRNA score.
-#' @param mrnalist List containing the mRNA targets for the miRNAs of interest. This is a \code{list} object and can be obtained from \code{\link{rbiomirGS_mrnalist}} function.
+#' @param mrnalist List containing the mRNA targets for the miRNAs of interest. This is a \code{list} object and can be obtained from \code{\link{rbiomirgs_mrnascan}} function.
 #' @param mrna_Weight A vector weight for the miRNA-mRNA interaction. Default is \code{NULL}.
 #' @param gs_file Input \code{gmt} for gene set, and can be obtained from \code{ensembl} databases.
 #' @param optim_method The parameter optimization method for the logistic regression model. Options are \code{"L-BFGS-B"}, \code{"BFGS"}, and \code{"IWLS"}. Default is \code{"L-BFGS-B"}.
@@ -134,9 +134,9 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
   colnames(mat) <- mirna.working
 
   if (is.null(mrna_Weight)){
-    mrna.score <- -rowSums(mat)
+    mrna.score <- -rowSums(mat) # reversed sign from miRNA to mRNA. Positive number means activation on mRNA and GS from this point on.
   } else {
-    mrna.score <- mrna_Weight * (-rowSums(mat))
+    mrna.score <- mrna_Weight * (-rowSums(mat)) # reversed sign from miRNA to mRNA. Positive number means activation on mRNA and GS from this point on.
   }
 
   names(mrna.score) <- rownames(mat)
@@ -328,9 +328,9 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
   rownames(res) <- blocks
 
   if (optim_method == "IWLS"){
-    colnames(res) <- c("converged", "loss", "gene.tested", "coef.", "std.err.", "t-value", "p.value")
+    colnames(res) <- c("converged", "loss", "gene.tested", "coef", "std.err", "t.value", "p.value")
   } else {
-    colnames(res) <- c("gene.tested", "coef.", "std.err.", "loss", "z-score", "p.value") # see if to add "converged"
+    colnames(res) <- c("gene.tested", "coef", "std.err", "loss", "z.score", "p.value") # see if to add "converged"
   }
 
   ## p value adjustment
