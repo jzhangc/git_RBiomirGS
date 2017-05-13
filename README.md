@@ -19,7 +19,10 @@ Installation:
 
 Update log
 
-    0.2.0 (May.12.2017)
+    0.2.1 (May.13.2017)
+      - mRNA score output added
+
+    0.2.0
       - Package name changed to RBiomirGS
       - Plot functions added: rbiomirgs_volcano(), rbiomirgs_histogram()
       - Adjustments on the variable names for logitstic regression resutls

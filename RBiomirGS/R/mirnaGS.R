@@ -90,22 +90,22 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
   if (is.null(defile)){
     if (class(mirna_DE) == "data.frame"){
       mirna.DE <- mirna_DE
-      mirna.score <- sign(mirna.DE[, var_mirnaFC]) * (-log10(mirna.DE[, var_mirnaP]))
+      mirna.score <- sign(log2(mirna.DE[, var_mirnaFC])) * (-log10(mirna.DE[, var_mirnaP]))
       names(mirna.score) <- mirna.DE[, var_mirnaName]
     } else if (class(mirna_DE == "matrix")){
       mirna.DE <- mirna_DE
-      mirna.score <- sign(as.numeric(mirna.DE[, var_mirnaFC])) * (-log10(as.numeric(mirna.DE[, var_mirnaP])))
+      mirna.score <- sign(log2(as.numeric(mirna.DE[, var_mirnaFC]))) * (-log10(as.numeric(mirna.DE[, var_mirnaP])))
       names(mirna.score) <- mirna.DE[, var_mirnaName]
     } else if (class(mirna_DE) == "list"){
       mirna.DE <- mirna_DE
-      mirna.score <- sign(mirna.DE[[var_mirnaFC]]) * (-log10(mirna.DE[[var_mirnaP]]))
+      mirna.score <- sign(log2(mirna.DE[[var_mirnaFC]])) * (-log10(mirna.DE[[var_mirnaP]]))
       names(mirna.score) <- mirna.DE[[var_mirnaName]]
     } else {
       stop("Currently, the input only supports dataframe, list or matrix")
     }
   } else {
     mirna.DE <- read.csv(file = defile, header = TRUE, stringsAsFactors = FALSE)
-    mirna.score <- sign(mirna.DE[, var_mirnaFC]) * (-log10(mirna.DE[, var_mirnaP]))
+    mirna.score <- sign(log2(mirna.DE[, var_mirnaFC])) * (-log10(mirna.DE[, var_mirnaP]))
     names(mirna.score) <- mirna.DE[, var_mirnaName]
   }
 
@@ -342,5 +342,9 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
 
   ## output
   write.csv(out, file = paste(objTitle, "_GS.csv", sep = ""), na = "NA", row.names = FALSE)
+  write.csv(mrna.score, file = "mrnascore.csv", na = "NA", row.names = TRUE)
+  write.csv(mirna.score, file = "mirnascore.csv", na = "NA", row.names = TRUE)
   assign(paste(objTitle, "_GS", sep = ""), out, envir = .GlobalEnv)
+  assign("mrnascore", mrna.score, envir = .GlobalEnv)
+  assign("mirnascore", mirna.score, envir = .GlobalEnv)
 }
