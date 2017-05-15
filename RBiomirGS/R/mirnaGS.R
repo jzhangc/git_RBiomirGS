@@ -104,7 +104,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
       stop("Currently, the input only supports dataframe, list or matrix")
     }
   } else {
-    mirna.DE <- read.csv(file = defile, header = TRUE, stringsAsFactors = FALSE)
+    mirna.DE <- read.csv(file = defile, header = TRUE, stringsAsFactors = FALSE, check.names = FALSE)
     mirna.score <- sign(log2(mirna.DE[, var_mirnaFC])) * (-log10(mirna.DE[, var_mirnaP]))
     names(mirna.score) <- mirna.DE[, var_mirnaName]
   }
