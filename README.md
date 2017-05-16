@@ -19,7 +19,13 @@ Installation:
 
 Update log
 
-    0.2.2 (May.15.2017)
+    0.2.3 (May.16.2017)
+      - miRNA:mRNA interaction weight functionality fixed
+      - Parameter optimization for rbiomirgs_logistic() adjusted
+      - Other bug fixes
+    
+    
+    0.2.2 
       - arugment adjusted for the volcano plot function
     
     0.2.1 

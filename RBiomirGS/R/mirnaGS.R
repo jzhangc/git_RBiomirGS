@@ -44,7 +44,7 @@ rbiomirgs_gmt <- function(file){
 #' @param mrnalist List containing the mRNA targets for the miRNAs of interest. This is a \code{list} object and can be obtained from \code{\link{rbiomirgs_mrnascan}} function.
 #' @param mrna_Weight A vector weight for the miRNA-mRNA interaction. Default is \code{NULL}.
 #' @param gs_file Input \code{gmt} for gene set, and can be obtained from \code{ensembl} databases.
-#' @param optim_method The parameter optimization method for the logistic regression model. Options are \code{"L-BFGS-B"}, \code{"BFGS"}, and \code{"IWLS"}. Default is \code{"L-BFGS-B"}.
+#' @param optim_method The parameter optimization method for the logistic regression model. Options are \code{"L-BFGS-B"}, \code{"BFGS"}, and \code{"IWLS"}. Default is \code{"IWLS"}.
 #' @param p.adj P value adjustment methods. Options are \code{"holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"}. Default is \code{"fdr"}.
 #' @param ... Addtional arguments for \code{optim} function.
 #' @param parallelComputing If to use parallel computing or not. Default is \code{FALSE}.
@@ -69,7 +69,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
                                mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "p.value",
                                mrnalist = NULL, mrna_Weight = NULL,
                                gs_file = NULL,
-                               optim_method = "L-BFGS-B", p.adj = "fdr",
+                               optim_method = "IWLS", p.adj = "fdr",
                                ...,
                                parallelComputing = FALSE, clusterType = "PSOCK"){
 
@@ -136,7 +136,18 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
   if (is.null(mrna_Weight)){
     mrna.score <- -rowSums(mat) # reversed sign from miRNA to mRNA. Positive number means activation on mRNA and GS from this point on.
   } else {
-    mrna.score <- mrna_Weight * (-rowSums(mat)) # reversed sign from miRNA to mRNA. Positive number means activation on mRNA and GS from this point on.
+    w <- as.matrix(mrna_Weight)
+
+    if (identical(dim(mat), dim(w))){
+      mat_w <- mat * w
+      colnames(mat_w) <- mirna.working
+      rownames(mat_w) <- mrna
+      mrna.score <- mrna_Weight * (-rowSums(mat_w)) # reversed sign from miRNA to mRNA. Positive number means activation on mRNA and GS from this point on.
+    } else {
+      stop(cat("The miRNA:mRNA interaction weight matrix doesn't match the dimension of the miRNA:mRNA score matrix. Please check."))
+
+    }
+
   }
 
   names(mrna.score) <- rownames(mat)

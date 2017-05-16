@@ -1,7 +1,7 @@
 Package: RBiomirGS
 Type: Package
 Title: Simple to use package for classification-based miRNA pathway analysis.
-Version: 0.2.2
+Version: 0.2.3
 Author: Jing Zhang
 Maintainer: Jing Zhang <jzhangcad@gmail.com>
 Description: The package handles miRNA:mRNA interaction mapping, hsa mRNA ortholog search, and uses logistic regression for miRNA gene set anlaysis.

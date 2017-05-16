@@ -7,7 +7,7 @@
 rbiomirgs_logistic(objTitle = "mirna_mrna", defile = NULL,
   mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "logFC",
   var_mirnaP = "p.value", mrnalist = NULL, mrna_Weight = NULL,
-  gs_file = NULL, optim_method = "L-BFGS-B", p.adj = "fdr", ...,
+  gs_file = NULL, optim_method = "IWLS", p.adj = "fdr", ...,
   parallelComputing = FALSE, clusterType = "PSOCK")
 }
 \arguments{
@@ -29,7 +29,7 @@ rbiomirgs_logistic(objTitle = "mirna_mrna", defile = NULL,
 
 \item{gs_file}{Input \code{gmt} for gene set, and can be obtained from \code{ensembl} databases.}
 
-\item{optim_method}{The parameter optimization method for the logistic regression model. Options are \code{"L-BFGS-B"}, \code{"BFGS"}, and \code{"IWLS"}. Default is \code{"L-BFGS-B"}.}
+\item{optim_method}{The parameter optimization method for the logistic regression model. Options are \code{"L-BFGS-B"}, \code{"BFGS"}, and \code{"IWLS"}. Default is \code{"IWLS"}.}
 
 \item{p.adj}{P value adjustment methods. Options are \code{"holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"}. Default is \code{"fdr"}.}
 
