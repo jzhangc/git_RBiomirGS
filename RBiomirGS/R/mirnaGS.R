@@ -142,7 +142,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
       mat_w <- mat * w
       colnames(mat_w) <- mirna.working
       rownames(mat_w) <- mrna
-      mrna.score <- mrna_Weight * (-rowSums(mat_w)) # reversed sign from miRNA to mRNA. Positive number means activation on mRNA and GS from this point on.
+      mrna.score <- -rowSums(mat_w) # reversed sign from miRNA to mRNA. Positive number means activation on mRNA and GS from this point on.
     } else {
       stop(cat("The miRNA:mRNA interaction weight matrix doesn't match the dimension of the miRNA:mRNA score matrix. Please check."))
 
