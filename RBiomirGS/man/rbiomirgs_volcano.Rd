@@ -6,7 +6,7 @@
 \usage{
 rbiomirgs_volcano(gsadfm, topgsLabel = FALSE, n = 5, gsVar = "GS",
   padding = 0.5, gsLabelSize = 5, logoddsratio = 0, fdr = TRUE,
-  q.value = 0.05, Title = NULL, xLabel = "Log odds ratio",
+  q_value = 0.05, Title = NULL, xLabel = "Log odds ratio",
   yLabel = "-log10(p value)", symbolSize = 2, sigColour = "red",
   nonsigColour = "gray", xTxtSize = 10, yTxtSize = 10, plotWidth = 170,
   plotHeight = 150, boxplot = TRUE)
@@ -28,7 +28,7 @@ rbiomirgs_volcano(gsadfm, topgsLabel = FALSE, n = 5, gsVar = "GS",
 
 \item{fdr}{If to ues fdr corrected p value for plotting. Default is \code{TRUE}.}
 
-\item{q.value}{Threshold for the p value. Default is \code{0.05}.}
+\item{q_value}{Threshold for the p value. Default is \code{0.05}.}
 
 \item{Title}{Figure title. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{NULL}.}
 

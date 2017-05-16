@@ -19,7 +19,10 @@ Installation:
 
 Update log
 
-    0.2.1 (May.13.2017)
+    0.2.2 (May.15.2017)
+      - arugment adjusted for the volcano plot function
+    
+    0.2.1 
       - mRNA score output added
 
     0.2.0

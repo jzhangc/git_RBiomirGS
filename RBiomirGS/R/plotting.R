@@ -9,7 +9,7 @@
 #' @param gsLabelSize When \code{topgsLabel = TRUE}, to set the label size. Default is \code{5}.
 #' @param logoddsratio Threshold for logoddsratio for volcano plot. Default is \code{0}.
 #' @param fdr If to ues fdr corrected p value for plotting. Default is \code{TRUE}.
-#' @param q.value Threshold for the p value. Default is \code{0.05}.
+#' @param q_value Threshold for the p value. Default is \code{0.05}.
 #' @param Title Figure title. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{NULL}.
 #' @param xLabel X-axis label. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{NULL}.
 #' @param yLabel Y-axis label. Make sure to use quotatio marks. Use \code{NULL} to hide. Default is \code{"Mean Decrease in Accurac"}
@@ -35,7 +35,7 @@
 #' @export
 rbiomirgs_volcano <- function(gsadfm,
                              topgsLabel = FALSE, n = 5, gsVar = "GS", padding = 0.5, gsLabelSize = 5,
-                             logoddsratio = 0, fdr = TRUE, q.value = 0.05,
+                             logoddsratio = 0, fdr = TRUE, q_value = 0.05,
                              Title = NULL, xLabel = "Log odds ratio", yLabel = "-log10(p value)",
                              symbolSize = 2, sigColour = "red", nonsigColour = "gray",
                              xTxtSize = 10, yTxtSize =10,
@@ -48,16 +48,16 @@ rbiomirgs_volcano <- function(gsadfm,
   # set the cutoff
   if (fdr){
 
-    if (length(which(tmpdfm$adj.p.val < q.value)) == 0){
+    if (length(which(tmpdfm$adj.p.val < q_value)) == 0){
       message(cat("No significant result was found under fdr correction. Proceed thresholding is conducted on raw p value."))
-      pcutoff <- q.value
+      pcutoff <- q_value
     } else {
-      pcutoff <- max(tmpdfm[tmpdfm$adj.p.val < q.value, ]$p.value)
+      pcutoff <- max(tmpdfm[tmpdfm$adj.p.val < q_value, ]$p.value)
     }
 
   } else {
 
-    pcutoff <- q.value
+    pcutoff <- q_value
   }
 
   cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value < pcutoff)
