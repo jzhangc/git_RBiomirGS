@@ -19,7 +19,11 @@ Installation:
 
 Update log
 
-    0.2.3 (May.16.2017)
+    0.2.4 (May.17.2017)
+      - miRNA and mRNA score output file name adjusted
+      - Bug fixes
+
+    0.2.3
       - miRNA:mRNA interaction weight functionality fixed
       - Parameter optimization for rbiomirgs_logistic() adjusted
       - Other bug fixes

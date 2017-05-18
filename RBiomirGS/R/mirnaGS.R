@@ -35,7 +35,9 @@ rbiomirgs_gmt <- function(file){
 #' @title rbiomirgs_logistic
 #'
 #' @description Logistic regression-based gene set analysis using measured miRNA p value and fold change,  with the option of custom-setting parameter optimization algorithms.
-#' @param objTitle Output \code{csv} file name prefix.
+#' @param objTitle Output GS result \code{csv} file name prefix. Default is \code{mirna_mrna}.
+#' @param mirnascoreTitle Output miRNA score \code{csv} file name. Default is \code{mirnascore}.
+#' @param mrnascoreTitle Output mRNA score \code{csv} file name. Default is \code{mrnascore}.
 #' @param defile The input \code{csv} file containing miRNA list and DE resutls.
 #' @param mirna_DE DE list of miRNAs of interest. This can be a \code{data.frame}, \code{matrix} or \code{list} object.
 #' @param var_mirnaName Variable name for miRNA names in the DE list. Default is \code{"miRNA"}.
@@ -65,6 +67,8 @@ rbiomirgs_gmt <- function(file){
 #' }
 #' @export
 rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
+                               mirnascoreTitle = "mirnascore",
+                               mrnascoreTitle = "mrnascore",
                                defile = NULL,
                                mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "p.value",
                                mrnalist = NULL, mrna_Weight = NULL,
@@ -352,10 +356,14 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
   }
 
   ## output
+  mrna.score.out <- data.frame(EntrezID = rownames(mrna.score), S_mrna = mrna.score)
+  mirna.score.out <-data.frame(miRNA = names(mirna.score), S_mirna = mirna.score)
+
+
   write.csv(out, file = paste(objTitle, "_GS.csv", sep = ""), na = "NA", row.names = FALSE)
-  write.csv(mrna.score, file = "mrnascore.csv", na = "NA", row.names = TRUE)
-  write.csv(mirna.score, file = "mirnascore.csv", na = "NA", row.names = TRUE)
+  write.csv(mrna.score.out, file = paste(mrnascoreTitle, ".csv", sep = ""), na = "NA", row.names = FALSE)
+  write.csv(mirna.score.out, file = paste(mirnascoreTitle, ".csv", sep = ""), na = "NA", row.names = FALSE)
   assign(paste(objTitle, "_GS", sep = ""), out, envir = .GlobalEnv)
-  assign("mrnascore", mrna.score, envir = .GlobalEnv)
-  assign("mirnascore", mirna.score, envir = .GlobalEnv)
+  assign(mrnascoreTitle, mrna.score.out, envir = .GlobalEnv)
+  assign(mirnascoreTitle, mirna.score.out, envir = .GlobalEnv)
 }

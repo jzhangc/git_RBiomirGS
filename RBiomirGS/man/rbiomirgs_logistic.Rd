@@ -4,14 +4,19 @@
 \alias{rbiomirgs_logistic}
 \title{rbiomirgs_logistic}
 \usage{
-rbiomirgs_logistic(objTitle = "mirna_mrna", defile = NULL,
-  mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "logFC",
-  var_mirnaP = "p.value", mrnalist = NULL, mrna_Weight = NULL,
-  gs_file = NULL, optim_method = "IWLS", p.adj = "fdr", ...,
-  parallelComputing = FALSE, clusterType = "PSOCK")
+rbiomirgs_logistic(objTitle = "mirna_mrna", mirnascoreTitle = "mirnascore",
+  mrnascoreTitle = "mrnascore", defile = NULL, mirna_DE = NULL,
+  var_mirnaName = "miRNA", var_mirnaFC = "logFC", var_mirnaP = "p.value",
+  mrnalist = NULL, mrna_Weight = NULL, gs_file = NULL,
+  optim_method = "IWLS", p.adj = "fdr", ..., parallelComputing = FALSE,
+  clusterType = "PSOCK")
 }
 \arguments{
-\item{objTitle}{Output \code{csv} file name prefix.}
+\item{objTitle}{Output GS result \code{csv} file name prefix. Default is \code{mirna_mrna}.}
+
+\item{mirnascoreTitle}{Output miRNA score \code{csv} file name. Default is \code{mirnascore}.}
+
+\item{mrnascoreTitle}{Output mRNA score \code{csv} file name. Default is \code{mrnascore}.}
 
 \item{defile}{The input \code{csv} file containing miRNA list and DE resutls.}
 
