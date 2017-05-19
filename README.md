@@ -15,11 +15,15 @@ Installation:
     
   - Install the package
   
-        devtools::install_github("jzhangc/git_RBiomiRGS/RBiomiRGS", repos = BiocInstaller::biocinstallRepos())   
+        devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocInstaller::biocinstallRepos())   
 
 Update log
+    
+    0.2.5 (May.18.2017)
+      - p value thresholding added for rbiomirgs_histogram()
+      - Bug fixes
 
-    0.2.4 (May.17.2017)
+    0.2.4
       - miRNA and mRNA score output file name adjusted
       - Bug fixes
 

@@ -121,6 +121,9 @@ rbiomirgs_volcano <- function(gsadfm,
 #' @param gsadfm Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.
 #' @param gs.name Whether or not to display gene set names on the y-axis. Default is \code{FALSE}.
 #' @param n Number of gene sets to plot. Options are \code{"all"} and an integer number. Default is \code{"all"}.
+#' @param signif_only Wether to plot only the significantly enriched GS. Default is \code{FALSE}.
+#' @param p_adj Set when \code{signif_only = TRUE}, wether to use adjusted p value for thresholding. Default is \code{TRUE}.
+#' @param q_value Set when \code{signif_only = TRUE}, the significance threshold. Default is \code{0.05}.
 #' @param y.rightside Whether or not to display right side y-axis. Default is \code{FALSE}.
 #' @param Title Title of the plot. Default is \code{NULL}.
 #' @param xLabel X-axis label. Default is \code{"Log  odds ratio"}.
@@ -144,14 +147,23 @@ rbiomirgs_volcano <- function(gsadfm,
 #' }
 #' @export
 rbiomirgs_histogram <- function(gsadfm,
-                                gs.name = FALSE,  n = "all", y.rightside = FALSE,
+                                gs.name = FALSE,  n = "all", signif_only = FALSE, p_adj = TRUE, q_value = 0.05,
+                                y.rightside = FALSE,
                                 Title = NULL, xLabel = "Log odds ratio", yLabel = NULL,
                                 errorbarWidth = 0.2,
                                 xTxtSize = 10, yTxtSize = 10,
                                 plotWidth = 250, plotHeight = 230){
 
   # prepare the dataframe for ggplot2
-  dfm <- gsadfm[order(abs(gsadfm[, "coef"]), decreasing = TRUE), ] # sort according to the absolute value of the coef
+  if (signif_only){ # if significant GS only
+    if (p_adj){
+      dfm <- gsadfm[gsadfm$adj.p.val < q_value, ]
+    } else {
+      dfm <- gsadfm[gsadfm$p.value < q_value, ]
+    }
+  }
+
+  dfm <- dfm[order(abs(dfm[, "coef"]), decreasing = TRUE), ] # sort according to the absolute value of the coef
 
   # plot
   # prepare plotting dataframe

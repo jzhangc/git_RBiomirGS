@@ -5,6 +5,7 @@
 \title{rbiomirgs_histogram}
 \usage{
 rbiomirgs_histogram(gsadfm, gs.name = FALSE, n = "all",
+  signif_only = FALSE, p_adj = TRUE, q_value = 0.05,
   y.rightside = FALSE, Title = NULL, xLabel = "Log odds ratio",
   yLabel = NULL, errorbarWidth = 0.2, xTxtSize = 10, yTxtSize = 10,
   plotWidth = 250, plotHeight = 230)
@@ -15,6 +16,12 @@ rbiomirgs_histogram(gsadfm, gs.name = FALSE, n = "all",
 \item{gs.name}{Whether or not to display gene set names on the y-axis. Default is \code{FALSE}.}
 
 \item{n}{Number of gene sets to plot. Options are \code{"all"} and an integer number. Default is \code{"all"}.}
+
+\item{signif_only}{Wether to plot only the significantly enriched GS. Default is \code{FALSE}.}
+
+\item{p_adj}{Set when \code{signif_only = TRUE}, wether to use adjusted p value for thresholding. Default is \code{TRUE}.}
+
+\item{q_value}{Set when \code{signif_only = TRUE}, the significance threshold. Default is \code{0.05}.}
 
 \item{y.rightside}{Whether or not to display right side y-axis. Default is \code{FALSE}.}
 
