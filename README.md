@@ -1,5 +1,5 @@
 # RBiomirGS
-Simple to use package for miRNA gene set analysis, with miRNA-mRNA interaction searching and human mRNA orthologs conversion functionalites.
+Simple to use package for miRNA gene set analysis, with miRNA-mRNA interaction searching and human mRNA orthologs conversion functionalities.
 
 Installation:
 
