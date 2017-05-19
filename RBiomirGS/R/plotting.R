@@ -161,6 +161,8 @@ rbiomirgs_histogram <- function(gsadfm,
     } else {
       dfm <- gsadfm[gsadfm$p.value < q_value, ]
     }
+  } else {
+    dfm <- gsadfm
   }
 
   dfm <- dfm[order(abs(dfm[, "coef"]), decreasing = TRUE), ] # sort according to the absolute value of the coef
