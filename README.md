@@ -19,7 +19,7 @@ Installation:
 
 Update log
     
-    0.2.5 (May.18.2017)
+    0.2.5 (May.25.2017)
       - p value thresholding added for rbiomirgs_histogram()
       - Bug fixes
 

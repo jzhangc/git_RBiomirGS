@@ -32,7 +32,7 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   }
 
 
-  if (sp != "hsa" & sp != "mmu" & sp != "rno"){ # check species
+  if (!sp %in% c("hsa", "mmu", "rno")){ # check species
     stop(cat("Only human, mouse or rat are supported for now. Please choose either \"hsa\" (default), \"mmu\", or \"rno\" for species."))
   }
 
