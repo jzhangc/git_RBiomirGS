@@ -124,7 +124,6 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
 
   # message to show all the missing miRNAs (the ones without mRNA information)
 
-
   #### calculate mRNA score
   ## give product scaler for the scores: 1L for the miRNAs that are the upstream miRNA to the mRNA tagets (rows) (1L: TRUE, 0L: FALSE)
   mat <- foreach(i = mirna.working, .combine = cbind) %do% {tmp <- as.numeric(mrna %in% mrna.raw.list[[i]])} # logic to numeric
@@ -141,7 +140,6 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
     mrna.score <- -rowSums(mat) # reversed sign from miRNA to mRNA. Positive number means activation on mRNA and GS from this point on.
   } else {
     w <- as.matrix(mrna_Weight)
-
     if (identical(dim(mat), dim(w))){
       mat_w <- mat * w
       colnames(mat_w) <- mirna.working
@@ -149,19 +147,15 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
       mrna.score <- -rowSums(mat_w) # reversed sign from miRNA to mRNA. Positive number means activation on mRNA and GS from this point on.
     } else {
       stop(cat("The miRNA:mRNA interaction weight matrix doesn't match the dimension of the miRNA:mRNA score matrix. Please check."))
-
     }
-
   }
 
   names(mrna.score) <- rownames(mat)
   mrna.score <- as.matrix(mrna.score)
 
-
   #### set up GS
   GS <- rbiomirgs_gmt(file = gs_file)
-  blocks <- names(GS) # extract GS names
-
+  gs_names <- names(GS) # extract GS names
 
   #### logistic modelling
   ## tmpfuncs
@@ -177,29 +171,28 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
     tmpfunc_IWLS <- function(i){
 
       ## setup y
-      B <- as.numeric(mrna %in% GS[[i]])
-
+      y <- as.numeric(mrna %in% GS[[i]])
 
       # message
       cat(paste("Assessing gene set: ", i, "...", sep = ""))
 
-      model <- glm.fit(x = X, y = B, family = quasibinomial())
+      model <- glm.fit(x = x, y = y, family = quasibinomial())
       model.smry <- summary.glm(model)
 
       # message
       cat("done!\n")
 
       ## gather results
-      genes.tested <- sum(B)
+      genes.tested <- sum(y)
       coef <- model.smry$coefficients[, 1] # extract coef for loss calculation
-      loss <- cost(vTh = coef, mX = X, vY = B)
+      loss <- cost(vTh = coef, mX = x, vY = y)
 
       ## output
       tmp <- c(model$converged, loss, genes.tested, model.smry$coefficients[2, ])
     }
 
   } else { # set up tmpfuncs for optm methods
-    # logit (vectorized function, X is a matrix aand vTh is a vector)
+    # logit (vectorized function, x is a matrix aand vTh is a vector)
     vlogit <- function(mX, vTh){
       vH <- 1 / (1 + exp(-mX %*% vTh))
       return(vH)
@@ -208,34 +201,26 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
     # log likelihood
     # vY -  1 and 0s (label)
     vloglike <- function(mX, vY, vTh){
-
       vH <- vlogit(mX, vTh) # get the estimated probablity
-
       logvH <- log(vH) # log probability
-
       vY0 <- 1 - vY # 1 - y
       logvH0 <- log(1 - vH) # log 1 - P
-
       vY_t <- t(vY) # transpose. Check if this is really needed
       vY0_t <- t(vY0) # transpose Check if this is really needed
 
       # below is negative log likelihood, or the loss function for logit.
       # the goal is to minimize this (or maximize the positive likelihood)
       logl <- -sum(vY_t %*% logvH + vY0_t %*% logvH0)
-
       return(logl)
     }
 
     if (optim_method %in% c("BFGS","L-BFGS-B")){
       vGr <- function(mX, vY, vTh){
         grad <- vTh * 0
-
         vH <- vlogit(mX, vTh) # get the estimated probablity
-
         for (i in 1:ncol(mX)){ # for the variables only
           grad[i] <- sum(mX[, i] * (vY - vH))
         }
-
         return(-grad)
       }
     } else {
@@ -244,10 +229,10 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
 
     tmpfunc_optim <- function(i, altX, ...){
       # set up vY
-      B <- as.numeric(mrna %in% GS[[i]])
+      y <- as.numeric(mrna %in% GS[[i]])
 
       # initialize parameters
-      startvalue.model <- lm(B ~ altX) # note that since we use lm function, we don't need the x0 = 1 term here. So we use altX.
+      startvalue.model <- lm(y ~ altX) # note that since we use lm function, we don't need the x0 = 1 term here. So we use altX.
       startv <- startvalue.model$coefficients
 
       # message
@@ -256,7 +241,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
       # modelling/optimization
       sink(file = paste(objTitle, "_", optim_method, "_log.txt", sep = ""), append = TRUE) # dump iteration messages
       cat(paste(i, " \n", sep = ""))
-      vTh.optim <- optim(par = startv, fn = vloglike, gr = vGr, mX = X, vY = B,
+      vTh.optim <- optim(par = startv, fn = vloglike, gr = vGr, mX = x, vY = y,
                          method = optim_method,
                          control = list(trace = TRUE, REPORT = 1), hessian = TRUE, ...)
       cat("\n\n") # add a new line between gene sets
@@ -266,11 +251,11 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
       cat("done!\n")
 
       # gather the resutls
-      genes.tested <- sum(B)
+      genes.tested <- sum(y)
       coef <- vTh.optim$par
       covmat <- solve(vTh.optim$hessian)
       stderr <- sqrt(diag(covmat))
-      loss <- cost(vTh = coef, mX = X, vY = B)
+      loss <- cost(vTh = coef, mX = x, vY = y)
       z <- coef / stderr
       pvalue <- 2*(1 - pnorm(abs(z)))
       model.sum <- cbind(genes.tested, coef, stderr, loss, z, pvalue)
@@ -279,31 +264,24 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
 
   }
 
-
   ## logistic regression
   # set up variables
-  X <- cbind(rep(1, times = length(mrna)), mrna.score) # set up vairable
-  altX <- X[, 2] # this for automatically setting the initial values for the parameter
+  x <- cbind(rep(1, length(mrna)), mrna.score) # set up vairable
+  altX <- x[, 2] # this for automatically setting the initial values for the parameter
 
   ## modelling/optimization
   # set up result matrix
   if (optim_method == "IWLS"){
-    res <- matrix(NA, nrow = length(blocks), ncol = 7)
-
+    res <- matrix(NA, nrow = length(gs_names), ncol = 7)
   } else {
-    res <- matrix(NA, nrow = length(blocks), ncol = 6)
+    res <- matrix(NA, nrow = length(gs_names), ncol = 6)
   }
 
-
   if (!parallelComputing){
-
     if (optim_method == "IWLS"){
-
-      res[] <- foreach(i = blocks, .combine = rbind) %do% tmpfunc_IWLS(i)
-
+      res[] <- foreach(i = gs_names, .combine = rbind) %do% tmpfunc_IWLS(i)
     } else {
-
-      res[] <- foreach(i = blocks, .combine = rbind) %do% tmpfunc_optim(i, altX = altX)
+      res[] <- foreach(i = gs_names, .combine = rbind) %do% tmpfunc_optim(i, altX = altX)
     }
   } else {
     # set up cpu core number
@@ -317,30 +295,26 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
 
       ## modelling
       if (optim_method == "IWLS"){
-        res[] <- foreach(i = blocks, .combine = rbind) %dopar% tmpfunc_IWLS(i)
+        res[] <- foreach(i = gs_names, .combine = rbind) %dopar% tmpfunc_IWLS(i)
       } else {
-        res[] <- foreach(i = blocks, .combine = rbind) %dopar% tmpfunc_optim(i, altX = altX)
-
+        res[] <- foreach(i = gs_names, .combine = rbind) %dopar% tmpfunc_optim(i, altX = altX)
       }
     } else { # macOS and Unix-like systmes only
-
       # message
       cat("Assessing gene sets...")
 
       if (optim_method == "IWLS"){
-        res <- as.data.frame(do.call(rbind, mclapply(blocks, FUN = tmpfunc_IWLS, mc.cores = n_cores, mc.preschedule = FALSE)))
-
+        res <- as.data.frame(do.call(rbind, mclapply(gs_names, FUN = tmpfunc_IWLS, mc.cores = n_cores, mc.preschedule = FALSE)))
       } else {
-        res <- as.data.frame(do.call(rbind, mclapply(blocks, FUN = tmpfunc_optim, altX = altX, mc.cores = n_cores, mc.preschedule = FALSE)))
+        res <- as.data.frame(do.call(rbind, mclapply(gs_names, FUN = tmpfunc_optim, altX = altX, mc.cores = n_cores, mc.preschedule = FALSE)))
       }
-
       # message
       cat("done!\n")
     }
   }
 
   #### add matrix information and export
-  rownames(res) <- blocks
+  rownames(res) <- gs_names
 
   if (optim_method == "IWLS"){
     colnames(res) <- c("converged", "loss", "gene.tested", "coef", "std.err", "t.value", "p.value")
@@ -358,7 +332,6 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
   ## output
   mrna.score.out <- data.frame(EntrezID = rownames(mrna.score), S_mrna = mrna.score)
   mirna.score.out <-data.frame(miRNA = names(mirna.score), S_mirna = mirna.score)
-
 
   write.csv(out, file = paste(objTitle, "_GS.csv", sep = ""), na = "NA", row.names = FALSE)
   write.csv(mrna.score.out, file = paste(mrnascoreTitle, ".csv", sep = ""), na = "NA", row.names = FALSE)
