@@ -18,8 +18,12 @@ Installation:
         devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocInstaller::biocinstallRepos())   
 
 Update log
+
+    0.2.6 (Nov.22.2017)
+      - rbiomirgs_histogram() changed to rbiomirgs_bar()
+      - Bug fixes
     
-    0.2.5 (May.25.2017)
+    0.2.5
       - p value thresholding added for rbiomirgs_histogram()
       - Bug fixes
 

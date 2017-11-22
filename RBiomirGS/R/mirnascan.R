@@ -30,28 +30,18 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   if (is.null(mir)){
     stop(cat("Please set the input miRNA(s). Either single targets or a vector of mutliple ones can be used."))
   }
-
-
   if (!sp %in% c("hsa", "mmu", "rno")){ # check species
     stop(cat("Only human, mouse or rat are supported for now. Please choose either \"hsa\" (default), \"mmu\", or \"rno\" for species."))
   }
 
-
   #### set up the search input
   if (is.null(queryType)){
-
     stop(cat("Please set the queryType argument. Options are \"validated\" and \"predicted\"."))
-
   } else if (queryType != "validated" & queryType != "predicted"){
-
     stop(cat("queryType only takes \"validated\" or \"predicted\". Check the spell."))
-
   } else if (queryType == "validated"){
-
     db <- c("mirecords", "mirtarbase", "tarbase")
-
   } else if (queryType == "predicted"){
-
     if (sp == "rno"){
       db <- c("elmmo", "microcosm", "miranda", "mirdb")  # no "diana_microt", "pictar", "pita", "targetscan" for rno
     } else {
@@ -66,7 +56,6 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   # mode - queryType ("validated", "predicted")
   # percenetage - predictPercentage
   tmpfunc_q <- function(i, j, mode = NULL, percentage = NULL){
-
     target.table <- "target"
     mirna.table <- "mirna"
 
@@ -75,9 +64,7 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
     tmpmirna <- paste("('", tmpmirna, "')", sep = "")
 
     ## set up query syntax
-
     if (mode == "validated"){ # validated databases
-
       q <- paste("SELECT m.mature_mirna_id,", "t.target_symbol, t.target_entrez, t.target_ensembl,",
                  "i.experiment, i.pubmed_id FROM",
                  mirna.table,
@@ -103,7 +90,6 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
                  sep = "") # set up species
 
     } else { # predicted databases
-
       # from multiMiR pacakge, to get the score from the database
       tmpfunc_cutoff <- function(cutoff.file = "http://multimir.ucdenver.edu/multimir_cutoffs.rda"){
         multimir_cutoffs <- NULL
@@ -137,10 +123,8 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
       q <- paste(q, "(m.mature_mirna_acc IN", tmpmirna,
                  "OR m.mature_mirna_id IN", tmpmirna, ")",
                  sep = " ")
-
       q <- paste(q, " AND m.org = '", sp, "' AND t.org = '", sp, "'",
                  sep = "")  #add organism to the query
-
 
       # add dataset-specific cutoff to the query
       nm <- paste(j, sp, sep = ".")
@@ -217,7 +201,6 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   out_entrez <- vector(mode = "list", length = length(mir)) # output entrez list for modelling
   names(out_entrez) <- mir
 
-
   #### (optional) convert mmu/rno entrez ID to hsa entrez ID
   if (addhsaEntrez){
     # starting message
@@ -274,7 +257,6 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   }
 
   if (!parallelComputing){
-
     ## populate output list and output
     out[] <- lapply(mir, function(m){
       tmpout <- foreach(n = db, .combine = rbind, .packages = c("RCurl", "XML")) %do% {
@@ -373,13 +355,10 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   #### output
   ## the output list to the environment
   assign(paste(objTitle, "_mrna_list", sep = ""), out, envir = .GlobalEnv)
-
   ## the entrez list to the environment
   assign(paste(objTitle, "_mrna_entrez_list", sep = ""), out_entrez, envir = .GlobalEnv)
-
   ## the hsa entrez list to the environment
   if (addhsaEntrez){
     assign(paste(objTitle, "_mrna_hsa_entrez_list", sep = ""), out_hsa_entrez, envir = .GlobalEnv)
   }
-
 }

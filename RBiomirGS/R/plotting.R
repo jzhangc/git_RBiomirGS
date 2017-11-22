@@ -47,21 +47,16 @@ rbiomirgs_volcano <- function(gsadfm,
 
   # set the cutoff
   if (fdr){
-
     if (length(which(tmpdfm$adj.p.val < q_value)) == 0){
       message(cat("No significant result was found under fdr correction. Proceed thresholding is conducted on raw p value."))
       pcutoff <- q_value
     } else {
       pcutoff <- max(tmpdfm[tmpdfm$adj.p.val < q_value, ]$p.value)
     }
-
   } else {
-
     pcutoff <- q_value
   }
-
   cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value < pcutoff)
-
 
   # plot
   loclEnv <- environment()
@@ -111,11 +106,10 @@ rbiomirgs_volcano <- function(gsadfm,
   ggsave(filename = paste(deparse(substitute(gsadfm)),".volcano.pdf", sep = ""), plot = pltgtb,
          width = plotWidth, height = plotHeight, units = "mm",dpi = 600)
   grid.draw(pltgtb) # preview
-
 }
 
 
-#' @title rbiomirgs_histogram
+#' @title rbiomirgs_bar
 #'
 #' @description histogram plot function
 #' @param gsadfm Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.
@@ -138,15 +132,15 @@ rbiomirgs_volcano <- function(gsadfm,
 #' \dontrun{
 #'
 #' # horizontal version
-#' rbiomirgs_histogram(gsadfm = mirna_mrna_GS, n = "all", y.rideside = TRUE, yTxtSize = 8, plotWidth = 300, plotHeight = 200, xLabel = "Gene set", yLabel = "Log odds ratio")
+#' rbiomirgs_bar(gsadfm = mirna_mrna_GS, n = "all", y.rideside = TRUE, yTxtSize = 8, plotWidth = 300, plotHeight = 200, xLabel = "Gene set", yLabel = "Log odds ratio")
 #'
 #' # vertical version
-#'  rbiomirgs_histogram(gsadfm = mirna_mrna_GS, n = 60, yAxis = TRUE,
+#'  rbiomirgs_bar(gsadfm = mirna_mrna_GS, n = 60, yAxis = TRUE,
 #'  yTxtSize = 8, plotWidth = 300, plotHeight = 200, xLabel = "Log odds ratio")
 #'
 #' }
 #' @export
-rbiomirgs_histogram <- function(gsadfm,
+rbiomirgs_bar <- function(gsadfm,
                                 gs.name = FALSE,  n = "all", signif_only = FALSE, p_adj = TRUE, q_value = 0.05,
                                 y.rightside = FALSE,
                                 Title = NULL, xLabel = "Log odds ratio", yLabel = NULL,
@@ -234,15 +228,11 @@ rbiomirgs_histogram <- function(gsadfm,
     pltgtb <- gtable_add_cols(pltgtb, pltgtb$widths[pltgtb$layout[Aa, ]$l], length(pltgtb$widths) - 1)
     pltgtb <- gtable_add_grob(pltgtb, axs, Ap$t, length(pltgtb$widths) - 1, Ap$b)
   } else {
-
     pltgtb <- ggplot_gtable(ggplot_build(plt))
-
   }
 
   # export the file and draw a preview
   ggsave(filename = paste(deparse(substitute(gsadfm)),".histogram.plot.pdf", sep = ""), plot = pltgtb,
          width = plotWidth, height = plotHeight, units = "mm",dpi = 600)
   grid.draw(pltgtb) # preview
-
 }
-

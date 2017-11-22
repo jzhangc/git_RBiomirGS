@@ -9,7 +9,6 @@
 #' }
 #' @export
 rbiomirgs_gmt <- function(file){
-
   # open connection
   gmt <- file(file)
 
@@ -76,16 +75,13 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
                                optim_method = "IWLS", p.adj = "fdr",
                                ...,
                                parallelComputing = FALSE, clusterType = "PSOCK"){
-
   #### check arguments
   if (is.null(mirna_DE)){
     stop("Please set the input object.")
   }
-
   if (is.null(mrnalist) & class(mrnalist) != "list"){
     stop("Please set the proper mRNA target list. Currently, only list is supported.")
   }
-
   if (!optim_method %in% c("BFGS", "L-BFGS-B", "IWLS")){
     stop("Please set the proper optimization method. Options are \"L-BFGS-B\" (default), \"BFGS\" and \"IWLS\" ")
   }
