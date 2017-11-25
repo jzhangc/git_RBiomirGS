@@ -111,7 +111,7 @@ rbiomirgs_volcano <- function(gsadfm,
 
 #' @title rbiomirgs_bar
 #'
-#' @description histogram plot function
+#' @description Bar graph function
 #' @param gsadfm Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.
 #' @param gs.name Whether or not to display gene set names on the y-axis. Default is \code{FALSE}.
 #' @param n Number of gene sets to plot. Options are \code{"all"} and an integer number. Default is \code{"all"}.
@@ -124,7 +124,7 @@ rbiomirgs_volcano <- function(gsadfm,
 #' @param yLabel Y-axis label. Default is \code{NULL}.
 #' @param plotWidth Set the width of the plot. Default is \code{250}.
 #' @param plotHeight Set the height of the plot. Default is \code{230}.
-#' @details The function produces either a horizontal or a vertical version. When \code{gs.name = FALSE}, the function produces a plot with x-axis as gene set. When \code{gs.name = TRUE}, the plot will have gene set names displayed on the y-axis, and x-axis will be used for log oods ratio. The error bar is standard error of the coefficient (log odds ratio).
+#' @details The function produces either a bar graph or a vertical version. When \code{gs.name = FALSE}, the function produces a plot with x-axis as gene set. When \code{gs.name = TRUE}, the plot will have gene set names displayed on the y-axis, and x-axis will be used for log oods ratio. The error bar is standard error of the coefficient (log odds ratio).
 #' @return Outputs a \code{pdf} boxplot figure.
 #' @import ggplot2
 #' @importFrom grid grid.newpage grid.draw

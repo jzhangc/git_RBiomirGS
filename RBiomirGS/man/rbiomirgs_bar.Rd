@@ -38,10 +38,10 @@ rbiomirgs_bar(gsadfm, gs.name = FALSE, n = "all", signif_only = FALSE,
 Outputs a \code{pdf} boxplot figure.
 }
 \description{
-histogram plot function
+Bar graph function
 }
 \details{
-The function produces either a horizontal or a vertical version. When \code{gs.name = FALSE}, the function produces a plot with x-axis as gene set. When \code{gs.name = TRUE}, the plot will have gene set names displayed on the y-axis, and x-axis will be used for log oods ratio. The error bar is standard error of the coefficient (log odds ratio).
+The function produces either a bar graph or a vertical version. When \code{gs.name = FALSE}, the function produces a plot with x-axis as gene set. When \code{gs.name = TRUE}, the plot will have gene set names displayed on the y-axis, and x-axis will be used for log oods ratio. The error bar is standard error of the coefficient (log odds ratio).
 }
 \examples{
 \dontrun{
