@@ -232,7 +232,7 @@ rbiomirgs_bar <- function(gsadfm,
   }
 
   # export the file and draw a preview
-  ggsave(filename = paste(deparse(substitute(gsadfm)),".histogram.plot.pdf", sep = ""), plot = pltgtb,
+  ggsave(filename = paste(deparse(substitute(gsadfm)),".bar.plot.pdf", sep = ""), plot = pltgtb,
          width = plotWidth, height = plotHeight, units = "mm",dpi = 600)
   grid.draw(pltgtb) # preview
 }
