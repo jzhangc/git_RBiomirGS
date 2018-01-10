@@ -13,9 +13,13 @@ Installation:
       
         biocLite()
     
-  - Install the package
+  - Install stable release
   
-        devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocInstaller::biocinstallRepos())   
+        devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocInstaller::biocinstallRepos())
+  
+  - Install development build
+  
+        devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocInstaller::biocinstallRepos(), ref = "beta")
 
 Update log
 
