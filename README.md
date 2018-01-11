@@ -23,7 +23,10 @@ Installation:
 
 Update log
 
-    0.2.6 (Nov.22.2017)
+    0.2.7 (Jan.9.2018)
+      - Bug fixes
+    
+    0.2.6
       - rbiomirgs_histogram() changed to rbiomirgs_bar()
       - Bug fixes
     
