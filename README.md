@@ -23,6 +23,9 @@ Installation:
 
 Update log
 
+    0.2.8 (Feture preview)
+      - Citation information added
+
     0.2.7 (Jan.9.2018)
       - Bug fixes
     
