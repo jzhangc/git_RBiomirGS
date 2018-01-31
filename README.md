@@ -1,6 +1,13 @@
 # RBiomirGS
 Simple to use package for miRNA gene set analysis, with miRNA-mRNA interaction searching and human mRNA orthologs conversion functionalities.
 
+
+To cite in publication
+
+    Zhang J, Storey KB. 2018. RBiomirGS: An all-in-one miRNA gene set analysis solution featuring target mRNA mapping and expression profile integration. PeerJ. 6: e4262.
+  
+
+
 Installation:
 
   - Install devtools
