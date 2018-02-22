@@ -40,7 +40,8 @@ rbiomirgs_gmt <- function(file){
 #' @param defile The input \code{csv} file containing miRNA list and DE resutls.
 #' @param mirna_DE DE list of miRNAs of interest. This can be a \code{data.frame}, \code{matrix} or \code{list} object.
 #' @param var_mirnaName Variable name for miRNA names in the DE list. Default is \code{"miRNA"}.
-#' @param var_mirnaFC Variable name for lmiRNA fold change (or og transformed, logFC) in the DE list. Default is \code{"FC"}.
+#' @param var_mirnaFC Variable name for miRNA fold change (or log transformed FC) in the DE list. Default is \code{"FC"}.
+#' @param logFC Wether logFC (i.e. log2(FC)) is used for the fold change variable. Default is \code{TRUE}.
 #' @param var_mirnaP Variable name for miRNA p value in the DE list. Default is \code{"p.value"}. Note that the value will be -log10 transformed before calculating the miRNA score.
 #' @param mrnalist List containing the mRNA targets for the miRNAs of interest. This is a \code{list} object and can be obtained from \code{\link{rbiomirgs_mrnascan}} function.
 #' @param mrna_Weight A vector weight for the miRNA-mRNA interaction. Default is \code{NULL}.
@@ -69,7 +70,8 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
                                mirnascoreTitle = "mirnascore",
                                mrnascoreTitle = "mrnascore",
                                defile = NULL,
-                               mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "FC", var_mirnaP = "p.value",
+                               mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "FC", logFC = TRUE,
+                               var_mirnaP = "p.value",
                                mrnalist = NULL, mrna_Weight = NULL,
                                gs_file = NULL,
                                optim_method = "IWLS", p.adj = "fdr",
@@ -90,15 +92,27 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
   if (is.null(defile)){
     if (class(mirna_DE) == "data.frame"){
       mirna.DE <- mirna_DE
-      mirna.score <- sign(mirna.DE[, var_mirnaFC]) * (-log10(mirna.DE[, var_mirnaP]))
+      if (logFC){
+        mirna.score <- sign(mirna.DE[, var_mirnaFC]) * (-log10(mirna.DE[, var_mirnaP]))
+      } else {
+        mirna.score <- sign(log2(mirna.DE[, var_mirnaFC])) * (-log10(mirna.DE[, var_mirnaP]))
+      }
       names(mirna.score) <- mirna.DE[, var_mirnaName]
     } else if (class(mirna_DE == "matrix")){
       mirna.DE <- mirna_DE
-      mirna.score <- sign(as.numeric(mirna.DE[, var_mirnaFC])) * (-log10(as.numeric(mirna.DE[, var_mirnaP])))
+      if (logFC){
+        mirna.score <- sign(as.numeric(mirna.DE[, var_mirnaFC])) * (-log10(as.numeric(mirna.DE[, var_mirnaP])))
+      } else {
+        mirna.score <- sign(log2(as.numeric(mirna.DE[, var_mirnaFC]))) * (-log10(as.numeric(mirna.DE[, var_mirnaP])))
+      }
       names(mirna.score) <- mirna.DE[, var_mirnaName]
     } else if (class(mirna_DE) == "list"){
       mirna.DE <- mirna_DE
-      mirna.score <- sign(mirna.DE[[var_mirnaFC]]) * (-log10(mirna.DE[[var_mirnaP]]))
+      if (logFC){
+        mirna.score <- sign(mirna.DE[[var_mirnaFC]]) * (-log10(mirna.DE[[var_mirnaP]]))
+      } else {
+        mirna.score <- sign(log2(mirna.DE[[var_mirnaFC]])) * (-log10(mirna.DE[[var_mirnaP]]))
+      }
       names(mirna.score) <- mirna.DE[[var_mirnaName]]
     } else {
       stop("Currently, the input only supports dataframe, list or matrix")

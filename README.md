@@ -30,10 +30,11 @@ Installation:
 
 Update log
 
-    0.2.8 (Feb.15.2018)
-      - Citation information added
+    0.2.9 (Feb.22.2018)
+      - logFC arugment added to rbiomirgs_logistic()
 
-    0.2.7
+    0.2.7 - 0.2.8
+      - Citation information added
       - Bug fixes
     
     0.2.6
