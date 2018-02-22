@@ -31,7 +31,7 @@ Installation:
 Update log
 
     0.2.9 (Feb.22.2018)
-      - logFC arugment added to rbiomirgs_logistic()
+      - ratioFC arugment added to rbiomirgs_logistic()
       - The default value for var_mirnaFC of rbiomirgs_logistic() changed to "logFC"
 
     0.2.7 - 0.2.8
