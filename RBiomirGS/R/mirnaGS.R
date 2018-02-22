@@ -40,7 +40,7 @@ rbiomirgs_gmt <- function(file){
 #' @param defile The input \code{csv} file containing miRNA list and DE resutls.
 #' @param mirna_DE DE list of miRNAs of interest. This can be a \code{data.frame}, \code{matrix} or \code{list} object.
 #' @param var_mirnaName Variable name for miRNA names in the DE list. Default is \code{"miRNA"}.
-#' @param var_mirnaFC Variable name for miRNA fold change (or log transformed FC) in the DE list. Default is \code{"FC"}.
+#' @param var_mirnaFC Variable name for miRNA fold change (or log transformed FC) in the DE list. Default is \code{"logFC"}.
 #' @param logFC Wether logFC (i.e. log2(FC)) is used for the fold change variable. Default is \code{TRUE}.
 #' @param var_mirnaP Variable name for miRNA p value in the DE list. Default is \code{"p.value"}. Note that the value will be -log10 transformed before calculating the miRNA score.
 #' @param mrnalist List containing the mRNA targets for the miRNAs of interest. This is a \code{list} object and can be obtained from \code{\link{rbiomirgs_mrnascan}} function.
@@ -70,7 +70,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
                                mirnascoreTitle = "mirnascore",
                                mrnascoreTitle = "mrnascore",
                                defile = NULL,
-                               mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "FC", logFC = TRUE,
+                               mirna_DE = NULL, var_mirnaName = "miRNA", var_mirnaFC = "logFC", logFC = TRUE,
                                var_mirnaP = "p.value",
                                mrnalist = NULL, mrna_Weight = NULL,
                                gs_file = NULL,

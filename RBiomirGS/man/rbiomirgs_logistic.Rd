@@ -6,7 +6,7 @@
 \usage{
 rbiomirgs_logistic(objTitle = "mirna_mrna", mirnascoreTitle = "mirnascore",
   mrnascoreTitle = "mrnascore", defile = NULL, mirna_DE = NULL,
-  var_mirnaName = "miRNA", var_mirnaFC = "FC", logFC = TRUE,
+  var_mirnaName = "miRNA", var_mirnaFC = "logFC", logFC = TRUE,
   var_mirnaP = "p.value", mrnalist = NULL, mrna_Weight = NULL,
   gs_file = NULL, optim_method = "IWLS", p.adj = "fdr", ...,
   parallelComputing = FALSE, clusterType = "PSOCK")
@@ -24,7 +24,7 @@ rbiomirgs_logistic(objTitle = "mirna_mrna", mirnascoreTitle = "mirnascore",
 
 \item{var_mirnaName}{Variable name for miRNA names in the DE list. Default is \code{"miRNA"}.}
 
-\item{var_mirnaFC}{Variable name for miRNA fold change (or log transformed FC) in the DE list. Default is \code{"FC"}.}
+\item{var_mirnaFC}{Variable name for miRNA fold change (or log transformed FC) in the DE list. Default is \code{"logFC"}.}
 
 \item{logFC}{Wether logFC (i.e. log2(FC)) is used for the fold change variable. Default is \code{TRUE}.}
 
