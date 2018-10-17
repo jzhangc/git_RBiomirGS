@@ -30,6 +30,9 @@ Installation:
 
 Update log
 
+    0.2.10 (Feature preview)
+      - Additional argument check added to rbiomirgs_mrnascan()
+
     0.2.9 (Feb.22.2018)
       - ratioFC arugment added to rbiomirgs_logistic()
       - The default value for var_mirnaFC of rbiomirgs_logistic() changed to "logFC"

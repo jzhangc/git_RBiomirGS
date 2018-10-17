@@ -12,4 +12,4 @@ Imports:
     ggplot2 (>= 2.1.0), ggrepel (>= 0.6.5), gtable (>= 0.2.0), grid (>= 3.2.4), 
     biomaRt (>= 2.28.0),  calibrate (>= 1.7.2),
     parallel (>= 3.3.2), doParallel (>= 1.0.10), foreach (>= 1.4.3), XML (>= 3.98-1.5), RCurl (>= 1.95-4.8)
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

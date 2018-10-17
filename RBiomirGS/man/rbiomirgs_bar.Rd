@@ -4,10 +4,11 @@
 \alias{rbiomirgs_bar}
 \title{rbiomirgs_bar}
 \usage{
-rbiomirgs_bar(gsadfm, gs.name = FALSE, n = "all", signif_only = FALSE,
-  p_adj = TRUE, q_value = 0.05, y.rightside = FALSE, Title = NULL,
-  xLabel = "Log odds ratio", yLabel = NULL, errorbarWidth = 0.2,
-  xTxtSize = 10, yTxtSize = 10, plotWidth = 250, plotHeight = 230)
+rbiomirgs_bar(gsadfm, gs.name = FALSE, n = "all",
+  signif_only = FALSE, p_adj = TRUE, q_value = 0.05,
+  y.rightside = FALSE, Title = NULL, xLabel = "Log odds ratio",
+  yLabel = NULL, errorbarWidth = 0.2, xTxtSize = 10, yTxtSize = 10,
+  plotWidth = 250, plotHeight = 230)
 }
 \arguments{
 \item{gsadfm}{Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.}

@@ -4,11 +4,12 @@
 \alias{rbiomirgs_logistic}
 \title{rbiomirgs_logistic}
 \usage{
-rbiomirgs_logistic(objTitle = "mirna_mrna", mirnascoreTitle = "mirnascore",
-  mrnascoreTitle = "mrnascore", defile = NULL, mirna_DE = NULL,
-  var_mirnaName = "miRNA", var_mirnaFC = "logFC", ratioFC = FALSE,
-  var_mirnaP = "p.value", mrnalist = NULL, mrna_Weight = NULL,
-  gs_file = NULL, optim_method = "IWLS", p.adj = "fdr", ...,
+rbiomirgs_logistic(objTitle = "mirna_mrna",
+  mirnascoreTitle = "mirnascore", mrnascoreTitle = "mrnascore",
+  defile = NULL, mirna_DE = NULL, var_mirnaName = "miRNA",
+  var_mirnaFC = "logFC", ratioFC = FALSE, var_mirnaP = "p.value",
+  mrnalist = NULL, mrna_Weight = NULL, gs_file = NULL,
+  optim_method = "IWLS", p.adj = "fdr", ...,
   parallelComputing = FALSE, clusterType = "PSOCK")
 }
 \arguments{

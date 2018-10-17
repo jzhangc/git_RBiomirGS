@@ -8,8 +8,8 @@ rbiomirgs_volcano(gsadfm, topgsLabel = FALSE, n = 5, gsVar = "GS",
   padding = 0.5, gsLabelSize = 5, logoddsratio = 0, fdr = TRUE,
   q_value = 0.05, Title = NULL, xLabel = "Log odds ratio",
   yLabel = "-log10(p value)", symbolSize = 2, sigColour = "red",
-  nonsigColour = "gray", xTxtSize = 10, yTxtSize = 10, plotWidth = 170,
-  plotHeight = 150, boxplot = TRUE)
+  nonsigColour = "gray", xTxtSize = 10, yTxtSize = 10,
+  plotWidth = 170, plotHeight = 150, boxplot = TRUE)
 }
 \arguments{
 \item{gsadfm}{Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.}

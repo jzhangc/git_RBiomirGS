@@ -33,6 +33,10 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   if (!sp %in% c("hsa", "mmu", "rno")){ # check species
     stop(cat("Only human, mouse or rat are supported for now. Please choose either \"hsa\" (default), \"mmu\", or \"rno\" for species."))
   }
+  if (sp == "hsa" && addhsaEntrez) {
+    cat("Argument addhsaEntrez automatically set to FALSE when sp = \"hsa\".\n")
+    addhsaEntrez = FALSE
+  }
 
   #### set up the search input
   if (is.null(queryType)){
