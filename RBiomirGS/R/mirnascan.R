@@ -28,7 +28,7 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
 
   #### check the arguments
   if (is.null(mir)) stop("Please set the input miRNA(s). Either single targets or a vector of mutliple ones can be used.")
-  if (!is.null(mir)) stop("The input argument mir needs to be a vector. ")
+  if (!is.null(dim(mir))) stop("The input argument mir needs to be a vector. ")
 
   if (!sp %in% c("hsa", "mmu", "rno")){ # check species
     stop(cat("Only human, mouse or rat are supported for now. Please choose either \"hsa\" (default), \"mmu\", or \"rno\" for species."))
