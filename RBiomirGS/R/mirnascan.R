@@ -1,7 +1,7 @@
 #' @title rbiomirgs_mrnascan
 #'
 #' @description Obtain target mRNA list for miRNAs of interest. Results can either be predicted or validated miRNA-mRNA interactions. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.This function needs a internet connection.
-#' @param mir Input miRNAs vector.
+#' @param mir Input miRNAs vector. Can't be a matrix or data frame.
 #' @param sp Species. Options are \code{"hsa"} (default), \code{"mmu"} and \code{"rno"}.
 #' @param addhsaEntrez When \code{sp = "mmu"} or \code{sp = "rno"}, users can set this argument to \code{TRUE} so that a new list containing hsa ortholog entrez ID will be exported to the environment. The function connects to the up-to-date \code{ensembl} databases.
 #' @param queryType Type of reuslts. Options are \code{"validated"} and \code{"predicted"}.
@@ -27,9 +27,9 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
                                parallelComputing = FALSE, clusterType = "PSOCK"){
 
   #### check the arguments
-  if (is.null(mir)){
-    stop(cat("Please set the input miRNA(s). Either single targets or a vector of mutliple ones can be used."))
-  }
+  if (is.null(mir)) stop("Please set the input miRNA(s). Either single targets or a vector of mutliple ones can be used.")
+  if (!is.null(mir)) stop("The input argument mir needs to be a vector. ")
+
   if (!sp %in% c("hsa", "mmu", "rno")){ # check species
     stop(cat("Only human, mouse or rat are supported for now. Please choose either \"hsa\" (default), \"mmu\", or \"rno\" for species."))
   }

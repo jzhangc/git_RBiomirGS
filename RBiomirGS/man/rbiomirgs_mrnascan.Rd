@@ -10,7 +10,7 @@ rbiomirgs_mrnascan(objTitle = "miRNA", mir = NULL, sp = "hsa",
   parallelComputing = FALSE, clusterType = "PSOCK")
 }
 \arguments{
-\item{mir}{Input miRNAs vector.}
+\item{mir}{Input miRNAs vector. Can't be a matrix or data frame.}
 
 \item{sp}{Species. Options are \code{"hsa"} (default), \code{"mmu"} and \code{"rno"}.}
 
