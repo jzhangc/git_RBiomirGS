@@ -16,22 +16,25 @@ Installation:
     
   - Install bioconductor
   
-        source("https://bioconductor.org/biocLite.R")
-      
-        biocLite()
+        if (!requireNamespace("BiocManager"))
+            install.packages("BiocManager")
+            
+        BiocManager::install()
     
   - Install stable release
   
-        devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocInstaller::biocinstallRepos())
+        devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocManager::repositories())
   
   - Install development build
   
-        devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocInstaller::biocinstallRepos(), ref = "beta")
+        devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocManager::repositories(), ref = "beta")
 
 Update log
 
     0.2.10 (Feature preview)
+    (ADDED)      
       - Additional argument check added to rbiomirgs_mrnascan()
+      - New bioconductor installation instructions added
 
     0.2.9 (Feb.22.2018)
       - ratioFC arugment added to rbiomirgs_logistic()
