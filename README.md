@@ -31,12 +31,12 @@ Installation:
 
 Update log
 
-    0.2.10 (Feature preview)
+    0.2.10 (Jan.17.2019)
     (ADDED)      
       - Additional argument check added to rbiomirgs_mrnascan()
       - New bioconductor installation instructions added
 
-    0.2.9 (Feb.22.2018)
+    0.2.9
       - ratioFC arugment added to rbiomirgs_logistic()
       - The default value for var_mirnaFC of rbiomirgs_logistic() changed to "logFC"
 
