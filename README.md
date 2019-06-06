@@ -31,8 +31,11 @@ Installation:
 
 Update log
 
-    0.2.10 (Jan.17.2019)
-    (ADDED)      
+    0.2.11 (June.5.2019)
+      - The default server url updated to "http://multimir.org/"
+      - Small fixes
+    
+    0.2.10
       - Additional argument check added to rbiomirgs_mrnascan()
       - New bioconductor installation instructions added
 
