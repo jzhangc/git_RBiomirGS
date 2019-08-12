@@ -6,8 +6,8 @@
 \usage{
 rbiomirgs_mrnascan(objTitle = "miRNA", mir = NULL, sp = "hsa",
   addhsaEntrez = FALSE, queryType = NULL, predictPercentage = 10,
-  url = "http://multimir.org/", parallelComputing = FALSE,
-  clusterType = "PSOCK")
+  url = "http://multimir.org/cgi-bin/multimir_univ.pl",
+  parallelComputing = FALSE, clusterType = "PSOCK")
 }
 \arguments{
 \item{mir}{Input miRNAs vector. Can't be a matrix or data frame.}
@@ -18,7 +18,7 @@ rbiomirgs_mrnascan(objTitle = "miRNA", mir = NULL, sp = "hsa",
 
 \item{queryType}{Type of reuslts. Options are \code{"validated"} and \code{"predicted"}.}
 
-\item{url}{The database host server: \code{"http://multimir.org/"}}
+\item{url}{The database host server: \code{"http://multimir.org/cgi-bin/multimir_univ.pl}}
 
 \item{parallelComputing}{If to use parallel computing or not. Default is \code{FALSE}.}
 
