@@ -31,7 +31,7 @@ Installation:
 
 Update log
 
-    0.2.11 (June.5.2019)
+    0.2.12 (Aug.12.2019)
       - The default server url updated to "http://multimir.org/cgi-bin/multimir_univ.pl"
       - Small fixes
     
