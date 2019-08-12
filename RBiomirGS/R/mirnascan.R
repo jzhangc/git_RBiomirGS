@@ -6,7 +6,7 @@
 #' @param addhsaEntrez When \code{sp = "mmu"} or \code{sp = "rno"}, users can set this argument to \code{TRUE} so that a new list containing hsa ortholog entrez ID will be exported to the environment. The function connects to the up-to-date \code{ensembl} databases.
 #' @param queryType Type of reuslts. Options are \code{"validated"} and \code{"predicted"}.
 #' @param predictPrecentage Set only if \code{queryType = "predicted"}. The percentage of the top scored mRNA predictions to return. Default is \code{5}.
-#' @param url The database host server: \code{"http://multimir.org/cgi-bin/multimir_univ.pl}
+#' @param url The database host server: \code{"http://multimir.org/cgi-bin/multimir_univ.pl"}
 #' @param parallelComputing If to use parallel computing or not. Default is \code{FALSE}.
 #' @param clusterType Only set when \code{parallelComputing = TRUE}, the type for parallel cluster. Options are \code{"PSOCK"} (all operating systems) and \code{"FORK"} (macOS and Unix-like system only). Default is \code{"PSOCK"}.
 #' @return The function returns a \code{list} object with mRNA targets for the query miRNAs, as well as detailed resutls to the working directory as \code{csv} files. When \code{sp = "mmu"} or \code{sp = "rno"}, and \code{addhsaEntrez = TRUE}, a new list containing hsa ortholog entrez ID will be exported to the environment.

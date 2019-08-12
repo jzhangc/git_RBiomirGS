@@ -18,7 +18,7 @@ rbiomirgs_mrnascan(objTitle = "miRNA", mir = NULL, sp = "hsa",
 
 \item{queryType}{Type of reuslts. Options are \code{"validated"} and \code{"predicted"}.}
 
-\item{url}{The database host server: \code{"http://multimir.org/cgi-bin/multimir_univ.pl}}
+\item{url}{The database host server: \code{"http://multimir.org/cgi-bin/multimir_univ.pl"}}
 
 \item{parallelComputing}{If to use parallel computing or not. Default is \code{FALSE}.}
 
