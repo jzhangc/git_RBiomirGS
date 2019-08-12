@@ -33,6 +33,7 @@ Update log
 
     0.2.12 (Aug.12.2019)
       - The default server url updated to "http://multimir.org/cgi-bin/multimir_univ.pl"
+      - rbiomirgs_mrnascan() updated with updated biomaRt entrezgene identifier
       - Small fixes
     
     0.2.10

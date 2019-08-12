@@ -226,7 +226,7 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
 
     # extract hsa entrezgene ID
     hsa_ensembl <- useMart("ensembl", dataset = "hsapiens_gene_ensembl") # establish the human set
-    attr_hsa <- c("ensembl_gene_id", "entrezgene")
+    attr_hsa <- c("ensembl_gene_id", "entrezgene_id")
     hsa_entrez <- getBM(attr_hsa, filters = "", values = TRUE,
                         mart = hsa_ensembl)
 
@@ -234,7 +234,7 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
     martsp_hsa_orth_entrez <- merge(martsp_hsa_orth, hsa_entrez,
                                     by.x = "hsapiens_homolog_ensembl_gene", by.y = "ensembl_gene_id",
                                     all.x = TRUE)
-    names(martsp_hsa_orth_entrez)[names(martsp_hsa_orth_entrez) == "entrezgene"] <- "hsa_entrezgene"
+    names(martsp_hsa_orth_entrez)[names(martsp_hsa_orth_entrez) == "entrezgene_id"] <- "hsa_entrezgene"
     martsp_hsa_orth_entrez <- martsp_hsa_orth_entrez[!duplicated(martsp_hsa_orth_entrez[, paste0(sp, "_ensembl_gene_id")]), ]
 
     # tmpfunc
