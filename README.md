@@ -31,6 +31,10 @@ Installation:
 
 Update log
 
+    0.2.13 (Mar.25.2021)
+      - rbiomirgs_logistic() updated to handle empty miRNA ID entries
+        - Small updates to rbiomirgs_logistic() message delivery
+    
     0.2.12 (Aug.12.2019)
       - The default server url updated to "http://multimir.org/cgi-bin/multimir_univ.pl"
       - rbiomirgs_mrnascan() updated with updated biomaRt entrezgene identifier

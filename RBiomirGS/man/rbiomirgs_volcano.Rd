@@ -4,12 +4,28 @@
 \alias{rbiomirgs_volcano}
 \title{rbiomirgs_volcano}
 \usage{
-rbiomirgs_volcano(gsadfm, topgsLabel = FALSE, n = 5, gsVar = "GS",
-  padding = 0.5, gsLabelSize = 5, logoddsratio = 0, fdr = TRUE,
-  q_value = 0.05, Title = NULL, xLabel = "Log odds ratio",
-  yLabel = "-log10(p value)", symbolSize = 2, sigColour = "red",
-  nonsigColour = "gray", xTxtSize = 10, yTxtSize = 10,
-  plotWidth = 170, plotHeight = 150, boxplot = TRUE)
+rbiomirgs_volcano(
+  gsadfm,
+  topgsLabel = FALSE,
+  n = 5,
+  gsVar = "GS",
+  padding = 0.5,
+  gsLabelSize = 5,
+  logoddsratio = 0,
+  fdr = TRUE,
+  q_value = 0.05,
+  Title = NULL,
+  xLabel = "Log odds ratio",
+  yLabel = "-log10(p value)",
+  symbolSize = 2,
+  sigColour = "red",
+  nonsigColour = "gray",
+  xTxtSize = 10,
+  yTxtSize = 10,
+  plotWidth = 170,
+  plotHeight = 150,
+  boxplot = TRUE
+)
 }
 \arguments{
 \item{gsadfm}{Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.}
@@ -26,7 +42,7 @@ rbiomirgs_volcano(gsadfm, topgsLabel = FALSE, n = 5, gsVar = "GS",
 
 \item{logoddsratio}{Threshold for logoddsratio for volcano plot. Default is \code{0}.}
 
-\item{fdr}{If to ues fdr corrected p value for plotting. Default is \code{TRUE}.}
+\item{fdr}{If to use fdr corrected p value for plotting. Default is \code{TRUE}.}
 
 \item{q_value}{Threshold for the p value. Default is \code{0.05}.}
 
@@ -34,7 +50,7 @@ rbiomirgs_volcano(gsadfm, topgsLabel = FALSE, n = 5, gsVar = "GS",
 
 \item{xLabel}{X-axis label. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{NULL}.}
 
-\item{yLabel}{Y-axis label. Make sure to use quotatio marks. Use \code{NULL} to hide. Default is \code{"Mean Decrease in Accurac"}}
+\item{yLabel}{Y-axis label. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{"Mean Decrease in Accurac"}}
 
 \item{symbolSize}{Size of the symbol. Default is \code{2}.}
 
@@ -57,7 +73,7 @@ A \code{pdf} file of the volcano plot.
 volcano plot function
 }
 \details{
-The function will use uncorrected p value for thresholding if no significant restuls were found under fdr. A messeage will display.
+The function will use uncorrected p value for thresholding if no significant results were found under fdr. A message will display.
 }
 \examples{
 \dontrun{

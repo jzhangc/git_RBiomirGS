@@ -8,11 +8,11 @@
 #' @param padding When \code{topgsLabel = TRUE}, to set the distance between the dot and the gene symbol. Default is \code{0.5}.
 #' @param gsLabelSize When \code{topgsLabel = TRUE}, to set the label size. Default is \code{5}.
 #' @param logoddsratio Threshold for logoddsratio for volcano plot. Default is \code{0}.
-#' @param fdr If to ues fdr corrected p value for plotting. Default is \code{TRUE}.
+#' @param fdr If to use fdr corrected p value for plotting. Default is \code{TRUE}.
 #' @param q_value Threshold for the p value. Default is \code{0.05}.
 #' @param Title Figure title. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{NULL}.
 #' @param xLabel X-axis label. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{NULL}.
-#' @param yLabel Y-axis label. Make sure to use quotatio marks. Use \code{NULL} to hide. Default is \code{"Mean Decrease in Accurac"}
+#' @param yLabel Y-axis label. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{"Mean Decrease in Accurac"}
 #' @param symbolSize Size of the symbol. Default is \code{2}.
 #' @param sigColour Colour of the significant genes or probes. Default is \code{"red"}.
 #' @param nonsigColour Colour of the non-significant genes or probes. Default is \code{"gray"}.
@@ -20,7 +20,7 @@
 #' @param yTxtSize Font size for the y-axis text. Default is \code{10}.
 #' @param plotWidth The width of the figure for the final output figure file. Default is \code{170}.
 #' @param plotHeight The height of the figure for the final output figure file. Default is \code{150}.
-#' @details The function will use uncorrected p value for thresholding if no significant restuls were found under fdr. A messeage will display.
+#' @details The function will use uncorrected p value for thresholding if no significant results were found under fdr. A message will display.
 #' @return A \code{pdf} file of the volcano plot.
 #' @import ggplot2
 #' @importFrom grid grid.newpage grid.draw
@@ -115,8 +115,8 @@ rbiomirgs_volcano <- function(gsadfm,
 #' @param gsadfm Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.
 #' @param gs.name Whether or not to display gene set names on the y-axis. Default is \code{FALSE}.
 #' @param n Number of gene sets to plot. Options are \code{"all"} and an integer number. Default is \code{"all"}.
-#' @param signif_only Wether to plot only the significantly enriched GS. Default is \code{FALSE}.
-#' @param p_adj Set when \code{signif_only = TRUE}, wether to use adjusted p value for thresholding. Default is \code{TRUE}.
+#' @param signif_only Whether to plot only the significantly enriched GS. Default is \code{FALSE}.
+#' @param p_adj Set when \code{signif_only = TRUE}, whether to use adjusted p value for thresholding. Default is \code{TRUE}.
 #' @param q_value Set when \code{signif_only = TRUE}, the significance threshold. Default is \code{0.05}.
 #' @param y.rightside Whether or not to display right side y-axis. Default is \code{FALSE}.
 #' @param Title Title of the plot. Default is \code{NULL}.

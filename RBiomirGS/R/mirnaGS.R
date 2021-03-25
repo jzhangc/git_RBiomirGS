@@ -41,16 +41,17 @@ rbiomirgs_gmt <- function(file){
 #' @param mirna_DE DE list of miRNAs of interest. This can be a \code{data.frame}, \code{matrix} or \code{list} object.
 #' @param var_mirnaName Variable name for miRNA names in the DE list. Default is \code{"miRNA"}.
 #' @param var_mirnaFC Variable name for miRNA fold change (or log transformed FC) in the DE list. Default is \code{"logFC"}.
-#' @param ratioFC Wether the FC provided is a ratio value. Default is \code{FALSE}.
+#' @param ratioFC Whether the FC provided is a ratio value. Default is \code{FALSE}.
 #' @param var_mirnaP Variable name for miRNA p value in the DE list. Default is \code{"p.value"}. Note that the value will be -log10 transformed before calculating the miRNA score.
 #' @param mrnalist List containing the mRNA targets for the miRNAs of interest. This is a \code{list} object and can be obtained from \code{\link{rbiomirgs_mrnascan}} function.
 #' @param mrna_Weight A vector weight for the miRNA-mRNA interaction. Default is \code{NULL}.
 #' @param gs_file Input \code{gmt} for gene set, and can be obtained from \code{ensembl} databases.
 #' @param optim_method The parameter optimization method for the logistic regression model. Options are \code{"L-BFGS-B"}, \code{"BFGS"}, and \code{"IWLS"}. Default is \code{"IWLS"}.
 #' @param p.adj P value adjustment methods. Options are \code{"holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"}. Default is \code{"fdr"}.
-#' @param ... Addtional arguments for \code{optim} function.
+#' @param ... Additional arguments for \code{optim} function.
 #' @param parallelComputing If to use parallel computing or not. Default is \code{FALSE}.
 #' @param clusterType Only set when \code{parallelComputing = TRUE}, the type for parallel cluster. Options are \code{"PSOCK"} (all operating systems) and \code{"FORK"} (macOS and Unix-like system only). Default is \code{"PSOCK"}.
+#' @param verbose Whether to display
 #' @return A \code{data.frame} object containing GS results to to the environment, as well as a \code{csv} to the working directory. A \code{txt} file containing the iteration information will be generated if \code{opti_method = "L-BFGS-B" or "BFGS"}.
 #' @import doParallel
 #' @import foreach
@@ -76,7 +77,8 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
                                gs_file = NULL,
                                optim_method = "IWLS", p.adj = "fdr",
                                ...,
-                               parallelComputing = FALSE, clusterType = "PSOCK"){
+                               parallelComputing = FALSE, clusterType = "PSOCK",
+                               verbose = TRUE){
   #### check arguments
   if (is.null(mirna_DE)){
     stop("Please set the input object.")
@@ -124,12 +126,23 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
   }
 
   #### prepare the mRNA list
-  mrna.raw.list <- mrnalist[!is.na(mrnalist)] # remove the NAs
+  if (length(mrnalist[names(mrnalist) == ""]) > 0) {
+    mrnalist <- mrnalist[names(mrnalist) != ""]  # remove empty miRNA symbols
+    if (verbose) cat("Empty miRNA ID entires removed. \n")
+  }
+  if (length(mrnalist[!is.na(mrnalist)]) > 0) {
+    mrna.raw.list <- mrnalist[!is.na(mrnalist)] # remove the NAs
+    if (verbose) cat("miRNAs without mRNA targets removed. \n")
+  }
   mrna <- sort(unique(unlist(mrna.raw.list))) # all mRNAs identified as miRNA targets
 
   mirna.in.DE <- as.character(mirna.DE[, var_mirnaName]) # extract miRNAs present in the DE results
-  mirna.in.mrna <- names(mrna.raw.list) # extract miRNAs with mRNA target information
+  if (length(mirna.in.DE[mirna.in.DE == ""]) > 0) {
+    mirna.in.DE <- mirna.in.DE[mirna.in.DE != ""]  # remove any empty entries
+    if (verbose) cat("mRNAs without an miRNA ID removed. \n\n")
+  }
 
+  mirna.in.mrna <- names(mrna.raw.list) # extract miRNAs with mRNA target information
   mirna.working <- intersect(mirna.in.DE, mirna.in.mrna) # extract miRNAs from DE resutls with mRNA target info
 
   # message to show all the missing miRNAs (the ones without mRNA information)
@@ -184,13 +197,13 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
       y <- as.numeric(mrna %in% GS[[i]])
 
       # message
-      cat(paste("Assessing gene set: ", i, "...", sep = ""))
+      if (verbose) cat(paste("Assessing gene set: ", i, "...", sep = ""))
 
       model <- glm.fit(x = x, y = y, family = quasibinomial())
       model.smry <- summary.glm(model)
 
       # message
-      cat("done!\n")
+      if (verbose) cat("done!\n")
 
       ## gather results
       genes.tested <- sum(y)
@@ -246,19 +259,19 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
       startv <- startvalue.model$coefficients
 
       # message
-      cat(paste("Assessing gene set: ", i, "...", sep = ""))
+      if (verbose) cat(paste("Assessing gene set: ", i, "...", sep = ""))
 
       # modelling/optimization
       sink(file = paste(objTitle, "_", optim_method, "_log.txt", sep = ""), append = TRUE) # dump iteration messages
-      cat(paste(i, " \n", sep = ""))
+      if (verbose) cat(paste(i, " \n", sep = ""))
       vTh.optim <- optim(par = startv, fn = vloglike, gr = vGr, mX = x, vY = y,
                          method = optim_method,
                          control = list(trace = TRUE, REPORT = 1), hessian = TRUE, ...)
-      cat("\n\n") # add a new line between gene sets
+      if (verbose) cat("\n\n") # add a new line between gene sets
       sink() # close dump
 
       # message
-      cat("done!\n")
+      if (verbose) cat("done!\n")
 
       # gather the resutls
       genes.tested <- sum(y)
@@ -271,7 +284,6 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
       model.sum <- cbind(genes.tested, coef, stderr, loss, z, pvalue)
       tmp <- model.sum[2 , ]
     }
-
   }
 
   ## logistic regression
@@ -311,7 +323,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
       }
     } else { # macOS and Unix-like systmes only
       # message
-      cat("Assessing gene sets...")
+      if (verbose) cat("Assessing gene sets...")
 
       if (optim_method == "IWLS"){
         res <- as.data.frame(do.call(rbind, mclapply(gs_names, FUN = tmpfunc_IWLS, mc.cores = n_cores, mc.preschedule = FALSE)))
@@ -319,7 +331,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
         res <- as.data.frame(do.call(rbind, mclapply(gs_names, FUN = tmpfunc_optim, altX = altX, mc.cores = n_cores, mc.preschedule = FALSE)))
       }
       # message
-      cat("done!\n")
+      if (verbose) cat("done!\n")
     }
   }
 

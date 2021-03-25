@@ -4,11 +4,23 @@
 \alias{rbiomirgs_bar}
 \title{rbiomirgs_bar}
 \usage{
-rbiomirgs_bar(gsadfm, gs.name = FALSE, n = "all",
-  signif_only = FALSE, p_adj = TRUE, q_value = 0.05,
-  y.rightside = FALSE, Title = NULL, xLabel = "Log odds ratio",
-  yLabel = NULL, errorbarWidth = 0.2, xTxtSize = 10, yTxtSize = 10,
-  plotWidth = 250, plotHeight = 230)
+rbiomirgs_bar(
+  gsadfm,
+  gs.name = FALSE,
+  n = "all",
+  signif_only = FALSE,
+  p_adj = TRUE,
+  q_value = 0.05,
+  y.rightside = FALSE,
+  Title = NULL,
+  xLabel = "Log odds ratio",
+  yLabel = NULL,
+  errorbarWidth = 0.2,
+  xTxtSize = 10,
+  yTxtSize = 10,
+  plotWidth = 250,
+  plotHeight = 230
+)
 }
 \arguments{
 \item{gsadfm}{Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.}
@@ -17,9 +29,9 @@ rbiomirgs_bar(gsadfm, gs.name = FALSE, n = "all",
 
 \item{n}{Number of gene sets to plot. Options are \code{"all"} and an integer number. Default is \code{"all"}.}
 
-\item{signif_only}{Wether to plot only the significantly enriched GS. Default is \code{FALSE}.}
+\item{signif_only}{Whether to plot only the significantly enriched GS. Default is \code{FALSE}.}
 
-\item{p_adj}{Set when \code{signif_only = TRUE}, wether to use adjusted p value for thresholding. Default is \code{TRUE}.}
+\item{p_adj}{Set when \code{signif_only = TRUE}, whether to use adjusted p value for thresholding. Default is \code{TRUE}.}
 
 \item{q_value}{Set when \code{signif_only = TRUE}, the significance threshold. Default is \code{0.05}.}
 

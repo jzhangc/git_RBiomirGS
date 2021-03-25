@@ -4,13 +4,26 @@
 \alias{rbiomirgs_logistic}
 \title{rbiomirgs_logistic}
 \usage{
-rbiomirgs_logistic(objTitle = "mirna_mrna",
-  mirnascoreTitle = "mirnascore", mrnascoreTitle = "mrnascore",
-  defile = NULL, mirna_DE = NULL, var_mirnaName = "miRNA",
-  var_mirnaFC = "logFC", ratioFC = FALSE, var_mirnaP = "p.value",
-  mrnalist = NULL, mrna_Weight = NULL, gs_file = NULL,
-  optim_method = "IWLS", p.adj = "fdr", ...,
-  parallelComputing = FALSE, clusterType = "PSOCK")
+rbiomirgs_logistic(
+  objTitle = "mirna_mrna",
+  mirnascoreTitle = "mirnascore",
+  mrnascoreTitle = "mrnascore",
+  defile = NULL,
+  mirna_DE = NULL,
+  var_mirnaName = "miRNA",
+  var_mirnaFC = "logFC",
+  ratioFC = FALSE,
+  var_mirnaP = "p.value",
+  mrnalist = NULL,
+  mrna_Weight = NULL,
+  gs_file = NULL,
+  optim_method = "IWLS",
+  p.adj = "fdr",
+  ...,
+  parallelComputing = FALSE,
+  clusterType = "PSOCK",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{objTitle}{Output GS result \code{csv} file name prefix. Default is \code{mirna_mrna}.}
@@ -27,7 +40,7 @@ rbiomirgs_logistic(objTitle = "mirna_mrna",
 
 \item{var_mirnaFC}{Variable name for miRNA fold change (or log transformed FC) in the DE list. Default is \code{"logFC"}.}
 
-\item{ratioFC}{Wether the FC provided is a ratio value. Default is \code{FALSE}.}
+\item{ratioFC}{Whether the FC provided is a ratio value. Default is \code{FALSE}.}
 
 \item{var_mirnaP}{Variable name for miRNA p value in the DE list. Default is \code{"p.value"}. Note that the value will be -log10 transformed before calculating the miRNA score.}
 
@@ -41,11 +54,13 @@ rbiomirgs_logistic(objTitle = "mirna_mrna",
 
 \item{p.adj}{P value adjustment methods. Options are \code{"holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"}. Default is \code{"fdr"}.}
 
-\item{...}{Addtional arguments for \code{optim} function.}
+\item{...}{Additional arguments for \code{optim} function.}
 
 \item{parallelComputing}{If to use parallel computing or not. Default is \code{FALSE}.}
 
 \item{clusterType}{Only set when \code{parallelComputing = TRUE}, the type for parallel cluster. Options are \code{"PSOCK"} (all operating systems) and \code{"FORK"} (macOS and Unix-like system only). Default is \code{"PSOCK"}.}
+
+\item{verbose}{Whether to display}
 }
 \value{
 A \code{data.frame} object containing GS results to to the environment, as well as a \code{csv} to the working directory. A \code{txt} file containing the iteration information will be generated if \code{opti_method = "L-BFGS-B" or "BFGS"}.

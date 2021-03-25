@@ -4,10 +4,17 @@
 \alias{rbiomirgs_mrnascan}
 \title{rbiomirgs_mrnascan}
 \usage{
-rbiomirgs_mrnascan(objTitle = "miRNA", mir = NULL, sp = "hsa",
-  addhsaEntrez = FALSE, queryType = NULL, predictPercentage = 10,
+rbiomirgs_mrnascan(
+  objTitle = "miRNA",
+  mir = NULL,
+  sp = "hsa",
+  addhsaEntrez = FALSE,
+  queryType = NULL,
+  predictPercentage = 10,
   url = "http://multimir.org/cgi-bin/multimir_univ.pl",
-  parallelComputing = FALSE, clusterType = "PSOCK")
+  parallelComputing = FALSE,
+  clusterType = "PSOCK"
+)
 }
 \arguments{
 \item{mir}{Input miRNAs vector. Can't be a matrix or data frame.}
