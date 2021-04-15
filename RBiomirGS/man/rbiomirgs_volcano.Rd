@@ -17,6 +17,7 @@ rbiomirgs_volcano(
   Title = NULL,
   xLabel = "Log odds ratio",
   yLabel = "-log10(p value)",
+  p_line_offset = 1,
   symbolSize = 2,
   sigColour = "red",
   nonsigColour = "gray",
@@ -52,6 +53,8 @@ rbiomirgs_volcano(
 
 \item{yLabel}{Y-axis label. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{"Mean Decrease in Accurac"}}
 
+\item{p_line_offset}{Percentage offset for the horizontal line. Default is \code{1} (no off set).}
+
 \item{symbolSize}{Size of the symbol. Default is \code{2}.}
 
 \item{sigColour}{Colour of the significant genes or probes. Default is \code{"red"}.}
@@ -74,6 +77,9 @@ volcano plot function
 }
 \details{
 The function will use uncorrected p value for thresholding if no significant results were found under fdr. A message will display.
+
+         \code{p_line_offset} is useful when \code{fdr = TRUE} and only one feature is passing the threshold.
+         With offset, the horizontal line would no longer pass through the dot.
 }
 \examples{
 \dontrun{

@@ -31,6 +31,9 @@ Installation:
 
 Update log
 
+    0.2.14 (April.16.2021)
+      - p_line_offset added to the rbiomirgs_volcano() function. See manual for details
+    
     0.2.13 (Mar.25.2021)
       - rbiomirgs_logistic() updated to handle empty miRNA ID entries
         - Small updates to rbiomirgs_logistic() message delivery

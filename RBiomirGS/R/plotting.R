@@ -13,6 +13,7 @@
 #' @param Title Figure title. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{NULL}.
 #' @param xLabel X-axis label. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{NULL}.
 #' @param yLabel Y-axis label. Make sure to use quotation marks. Use \code{NULL} to hide. Default is \code{"Mean Decrease in Accurac"}
+#' @param p_line_offset Percentage offset for the horizontal line. Default is \code{1} (no off set).
 #' @param symbolSize Size of the symbol. Default is \code{2}.
 #' @param sigColour Colour of the significant genes or probes. Default is \code{"red"}.
 #' @param nonsigColour Colour of the non-significant genes or probes. Default is \code{"gray"}.
@@ -21,6 +22,10 @@
 #' @param plotWidth The width of the figure for the final output figure file. Default is \code{170}.
 #' @param plotHeight The height of the figure for the final output figure file. Default is \code{150}.
 #' @details The function will use uncorrected p value for thresholding if no significant results were found under fdr. A message will display.
+#'
+#'          \code{p_line_offset} is useful when \code{fdr = TRUE} and only one feature is passing the threshold.
+#'          With offset, the horizontal line would no longer pass through the dot.
+#'
 #' @return A \code{pdf} file of the volcano plot.
 #' @import ggplot2
 #' @importFrom grid grid.newpage grid.draw
@@ -37,6 +42,7 @@ rbiomirgs_volcano <- function(gsadfm,
                              topgsLabel = FALSE, n = 5, gsVar = "GS", padding = 0.5, gsLabelSize = 5,
                              logoddsratio = 0, fdr = TRUE, q_value = 0.05,
                              Title = NULL, xLabel = "Log odds ratio", yLabel = "-log10(p value)",
+                             p_line_offset = 1,
                              symbolSize = 2, sigColour = "red", nonsigColour = "gray",
                              xTxtSize = 10, yTxtSize =10,
                              plotWidth = 170, plotHeight = 150,
@@ -51,7 +57,7 @@ rbiomirgs_volcano <- function(gsadfm,
       message(cat("No significant result was found under fdr correction. Proceed thresholding is conducted on raw p value."))
       pcutoff <- q_value
     } else {
-      pcutoff <- max(tmpdfm[tmpdfm$adj.p.val < q_value, ]$p.value)
+      pcutoff <- max(tmpdfm[tmpdfm$adj.p.val < q_value, ]$p.value) * p_line_offset
     }
   } else {
     pcutoff <- q_value
