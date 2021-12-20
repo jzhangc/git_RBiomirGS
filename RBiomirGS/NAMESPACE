@@ -3,6 +3,7 @@
 export(rbiomirgs_bar)
 export(rbiomirgs_gmt)
 export(rbiomirgs_logistic)
+export(rbiomirgs_logisticV2)
 export(rbiomirgs_mrnascan)
 export(rbiomirgs_volcano)
 import(biomaRt)
