@@ -6,6 +6,7 @@
 \usage{
 rbiomirgs_bar(
   gsadfm,
+  export_name = NULL,
   gs.name = FALSE,
   n = "all",
   signif_only = FALSE,
@@ -24,6 +25,8 @@ rbiomirgs_bar(
 }
 \arguments{
 \item{gsadfm}{Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.}
+
+\item{export_name}{String. File name prefix for output plots. Default is \code{NULL}.}
 
 \item{gs.name}{Whether or not to display gene set names on the y-axis. Default is \code{FALSE}.}
 

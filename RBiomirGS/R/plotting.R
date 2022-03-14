@@ -2,6 +2,7 @@
 #'
 #' @description volcano plot function
 #' @param gsadfm Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.
+#' @param export_name String. File name prefix for output plots. Default is \code{NULL}.
 #' @param topgsLabel If to display the top GS identification on the plot. Default is \code{FALSE}.
 #' @param n Number of top GS name to display. Only set this argument when \code{topgsLabel = TRUE}. Default is \code{5}.
 #' @param gsVar The name of the variable for GS name. Only set this argument when \code{geneName = TRUE}. Default is \code{GS}.
@@ -39,6 +40,7 @@
 #' }
 #' @export
 rbiomirgs_volcano <- function(gsadfm,
+                              export_name = NULL,
                              topgsLabel = FALSE, n = 5, gsVar = "GS", padding = 0.5, gsLabelSize = 5,
                              logoddsratio = 0, fdr = TRUE, q_value = 0.05,
                              Title = NULL, xLabel = "Log odds ratio", yLabel = "-log10(p value)",
@@ -50,6 +52,10 @@ rbiomirgs_volcano <- function(gsadfm,
 
   # set up the data frame
   tmpdfm <- gsadfm
+
+  if (is.null(export_name)) {
+    export_name = deparse(substitute(gsadfm))
+  }
 
   # set the cutoff
   if (fdr){
@@ -109,7 +115,7 @@ rbiomirgs_volcano <- function(gsadfm,
   pltgtb <- gtable_add_grob(pltgtb, axs, Ap$t, length(pltgtb$widths) - 1, Ap$b)
 
   # export the file and draw a preview
-  ggsave(filename = paste(deparse(substitute(gsadfm)),".volcano.pdf", sep = ""), plot = pltgtb,
+  ggsave(filename = paste(export_name,".gs.volcano.pdf", sep = ""), plot = pltgtb,
          width = plotWidth, height = plotHeight, units = "mm",dpi = 600)
   grid.draw(pltgtb) # preview
 }
@@ -119,6 +125,7 @@ rbiomirgs_volcano <- function(gsadfm,
 #'
 #' @description Bar graph function
 #' @param gsadfm Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.
+#' @param export_name String. File name prefix for output plots. Default is \code{NULL}.
 #' @param gs.name Whether or not to display gene set names on the y-axis. Default is \code{FALSE}.
 #' @param n Number of gene sets to plot. Options are \code{"all"} and an integer number. Default is \code{"all"}.
 #' @param signif_only Whether to plot only the significantly enriched GS. Default is \code{FALSE}.
@@ -147,12 +154,17 @@ rbiomirgs_volcano <- function(gsadfm,
 #' }
 #' @export
 rbiomirgs_bar <- function(gsadfm,
+                          export_name = NULL,
                                 gs.name = FALSE,  n = "all", signif_only = FALSE, p_adj = TRUE, q_value = 0.05,
                                 y.rightside = FALSE,
                                 Title = NULL, xLabel = "Log odds ratio", yLabel = NULL,
                                 errorbarWidth = 0.2,
                                 xTxtSize = 10, yTxtSize = 10,
                                 plotWidth = 250, plotHeight = 230){
+  # vars
+  if (is.null(export_name)) {
+    export_name = deparse(substitute(gsadfm))
+  }
 
   # prepare the dataframe for ggplot2
   if (signif_only){ # if significant GS only
@@ -238,7 +250,7 @@ rbiomirgs_bar <- function(gsadfm,
   }
 
   # export the file and draw a preview
-  ggsave(filename = paste(deparse(substitute(gsadfm)),".bar.plot.pdf", sep = ""), plot = pltgtb,
+  ggsave(filename = paste(export_name, ".gs.bar.plot.pdf", sep = ""), plot = pltgtb,
          width = plotWidth, height = plotHeight, units = "mm",dpi = 600)
   grid.draw(pltgtb) # preview
 }

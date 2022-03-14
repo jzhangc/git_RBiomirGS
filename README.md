@@ -30,7 +30,9 @@ Installation:
         devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocManager::repositories(), ref = "beta")
 
 Update log
-
+    0.2.16 (feature preview)
+      - It is now possible to custom file name for rbiomirgs_volcano() and rbiomirgs_bar()
+    
     0.2.15 (December.20.2021)
       - The entrez list derived from mirnascan() now has both "list" and "mir_entrez_list" classes
       - A new rbiomirgs_logisticV2() function added that always checks if the "mrnalist" is a "mir_entrez_list" class

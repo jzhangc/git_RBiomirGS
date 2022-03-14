@@ -6,6 +6,7 @@
 \usage{
 rbiomirgs_volcano(
   gsadfm,
+  export_name = NULL,
   topgsLabel = FALSE,
   n = 5,
   gsVar = "GS",
@@ -30,6 +31,8 @@ rbiomirgs_volcano(
 }
 \arguments{
 \item{gsadfm}{Input dataframe. The dataframe is the output from \code{\link{rbiomirgs_logistic}}.}
+
+\item{export_name}{String. File name prefix for output plots. Default is \code{NULL}.}
 
 \item{topgsLabel}{If to display the top GS identification on the plot. Default is \code{FALSE}.}
 
