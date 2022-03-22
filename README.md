@@ -30,8 +30,9 @@ Installation:
         devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocManager::repositories(), ref = "beta")
 
 Update log
-    0.2.16 (feature preview)
+    0.2.16 (March.21.2022)
       - It is now possible to custom file name for rbiomirgs_volcano() and rbiomirgs_bar()
+      - A bug fixed for rbiomirgs_volcano() where label for target passing alpha wasn't properly displayed when fdr=TRUE
     
     0.2.15 (December.20.2021)
       - The entrez list derived from mirnascan() now has both "list" and "mir_entrez_list" classes

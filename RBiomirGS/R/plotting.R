@@ -41,14 +41,14 @@
 #' @export
 rbiomirgs_volcano <- function(gsadfm,
                               export_name = NULL,
-                             topgsLabel = FALSE, n = 5, gsVar = "GS", padding = 0.5, gsLabelSize = 5,
-                             logoddsratio = 0, fdr = TRUE, q_value = 0.05,
-                             Title = NULL, xLabel = "Log odds ratio", yLabel = "-log10(p value)",
-                             p_line_offset = 1,
-                             symbolSize = 2, sigColour = "red", nonsigColour = "gray",
-                             xTxtSize = 10, yTxtSize =10,
-                             plotWidth = 170, plotHeight = 150,
-                             boxplot = TRUE){
+                              topgsLabel = FALSE, n = 5, gsVar = "GS", padding = 0.5, gsLabelSize = 5,
+                              logoddsratio = 0, fdr = TRUE, q_value = 0.05,
+                              Title = NULL, xLabel = "Log odds ratio", yLabel = "-log10(p value)",
+                              p_line_offset = 1,
+                              symbolSize = 2, sigColour = "red", nonsigColour = "gray",
+                              xTxtSize = 10, yTxtSize =10,
+                              plotWidth = 170, plotHeight = 150,
+                              boxplot = TRUE){
 
   # set up the data frame
   tmpdfm <- gsadfm
@@ -64,11 +64,12 @@ rbiomirgs_volcano <- function(gsadfm,
       pcutoff <- q_value
     } else {
       pcutoff <- max(tmpdfm[tmpdfm$adj.p.val < q_value, ]$p.value) * p_line_offset
+      cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value <= pcutoff)
     }
   } else {
     pcutoff <- q_value
+    cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value < pcutoff)
   }
-  cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value < pcutoff)
 
   # plot
   loclEnv <- environment()
@@ -91,7 +92,12 @@ rbiomirgs_volcano <- function(gsadfm,
           axis.text.y = element_text(size = yTxtSize, hjust = 0.5))
 
   if (topgsLabel){
-    tmpfltdfm <- tmpdfm[abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value < pcutoff, ]
+    if (fdr) {
+      tmpfltdfm <- tmpdfm[abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value <= pcutoff, ]
+    } else {
+      tmpfltdfm <- tmpdfm[abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value < pcutoff, ]
+    }
+
     tmpfltdfm <- tmpfltdfm[order(tmpfltdfm$p.value), ]
     plt <- plt + geom_text_repel(data = head(tmpfltdfm, n = n),
                                  aes(x = coef, y = -log10(p.value), label = head(tmpfltdfm, n = n)[, gsVar]),
