@@ -30,6 +30,9 @@ Installation:
         devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocManager::repositories(), ref = "beta")
 
 Update log
+    0.2.17 (November.16.2022)
+      - rbiomirgs_logistic() updated with error message ("incompabile") if to use a "mir_entrez_list" class
+
     0.2.16 (March.21.2022)
       - It is now possible to custom file name for rbiomirgs_volcano() and rbiomirgs_bar()
       - A bug fixed for rbiomirgs_volcano() where label for target passing alpha wasn't properly displayed when fdr=TRUE

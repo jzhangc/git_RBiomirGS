@@ -83,6 +83,11 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
   if (is.null(mirna_DE)){
     stop("Please set the input object.")
   }
+
+  if (any(class(mrnalist)) == "mir_entrez_list") {
+    stop("mrnalist is a mir_entrez_list object, please use rbiomirgs_logisticV2().")
+  }
+
   if (is.null(mrnalist) & class(mrnalist) != "list"){
     stop("Please set the proper mRNA target list. Currently, only list is supported.")
   }
