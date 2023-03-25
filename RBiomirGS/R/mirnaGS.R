@@ -84,7 +84,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
     stop("Please set the input object.")
   }
 
-  if (any(class(mrnalist)) == "mir_entrez_list") {
+  if (any(class(mrnalist) %in% "mir_entrez_list")) {
     stop("mrnalist is a mir_entrez_list object, please use rbiomirgs_logisticV2().")
   }
 
