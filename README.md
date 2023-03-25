@@ -30,6 +30,7 @@ Installation:
         devtools::install_github("jzhangc/git_RBiomiRGS/RBiomirGS", repos = BiocManager::repositories(), ref = "beta")
 
 Update log
+
     0.2.18 (March.25.2023)
       - A bug fixed for rbiomirgs_logistic() where the "mir_entrez_list" check fails to give proper error messages
 
