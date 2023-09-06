@@ -62,14 +62,16 @@ rbiomirgs_volcano <- function(gsadfm,
     if (length(which(tmpdfm$adj.p.val < q_value)) == 0){
       message(cat("No significant result was found under fdr correction. Proceed thresholding is conducted on raw p value."))
       pcutoff <- q_value
+      # cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value < pcutoff)
     } else {
       pcutoff <- max(tmpdfm[tmpdfm$adj.p.val < q_value, ]$p.value) * p_line_offset
-      cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value <= pcutoff)
+      # cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value <= pcutoff)
     }
   } else {
     pcutoff <- q_value
-    cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value < pcutoff)
+    # cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value < pcutoff)
   }
+  cutoff <- as.factor(abs(tmpdfm$coef) >= logoddsratio & tmpdfm$p.value < pcutoff)
 
   # plot
   loclEnv <- environment()
