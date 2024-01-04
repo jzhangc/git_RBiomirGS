@@ -364,6 +364,7 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   assign(paste(objTitle, "_mrna_entrez_list", sep = ""), out_entrez, envir = .GlobalEnv)
   ## the hsa entrez list to the environment
   if (addhsaEntrez){
+    class(out_hsa_entrez) <- c('list', 'mir_entrez_list')
     assign(paste(objTitle, "_mrna_hsa_entrez_list", sep = ""), out_hsa_entrez, envir = .GlobalEnv)
   }
 }

@@ -31,6 +31,9 @@ Installation:
 
 Update log
     
+    0.2.20 (January.3.2024)
+      - The hsa_entrez list now is also a "mir_entrez_list" class
+    
     0.2.19 (September.6.2023)
       - A bug fixed for rbiomirgs_volcano() where the function will crash when no FDR significance was found while FDR correction is active
 
