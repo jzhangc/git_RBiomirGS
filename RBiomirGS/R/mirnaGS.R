@@ -84,6 +84,10 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
     stop("Please set the input object.")
   }
 
+  for (var in c(var_mirnaName, var_mirnaFC, var_mirnaP)) {
+    if (!var %in% names(mirna_DE)) stop(paste0(var, "not found in the input mirna_DE"))
+  }
+
   if (any(class(mrnalist) %in% "mir_entrez_list")) {
     stop("mrnalist is a mir_entrez_list object, please use rbiomirgs_logisticV2().")
   }
@@ -91,6 +95,7 @@ rbiomirgs_logistic <- function(objTitle = "mirna_mrna",
   if (is.null(mrnalist) & class(mrnalist) != "list"){
     stop("Please set the proper mRNA target list. Currently, only list is supported.")
   }
+
   if (!optim_method %in% c("BFGS", "L-BFGS-B", "IWLS")){
     stop("Please set the proper optimization method. Options are \"L-BFGS-B\" (default), \"BFGS\" and \"IWLS\" ")
   }
@@ -421,10 +426,16 @@ rbiomirgs_logisticV2 <- function(objTitle = "mirna_mrna",
   if (is.null(mirna_DE)){
     stop("Please set the input object.")
   }
+
+  for (var in c(var_mirnaName, var_mirnaFC, var_mirnaP)) {
+    if (!var %in% names(mirna_DE)) stop(paste0(var, "not found in the input mirna_DE"))
+  }
+
   # if (is.null(mrnalist) & class(mrnalist) != "list"){
   #   stop("Please set the proper mRNA target list. Currently, only list is supported.")
   # }
   if (!any(class(mrnalist) %in% "mir_entrez_list")) stop("The mrnalist must be a \"mir_entrez_list\" class.")
+
   if (!optim_method %in% c("BFGS", "L-BFGS-B", "IWLS")){
     stop("Please set the proper optimization method. Options are \"L-BFGS-B\" (default), \"BFGS\" and \"IWLS\" ")
   }

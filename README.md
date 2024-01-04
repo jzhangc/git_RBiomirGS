@@ -33,6 +33,7 @@ Update log
     
     0.2.20 (January.3.2024)
       - The hsa_entrez list now is also a "mir_entrez_list" class
+      - rbiomirgs_logistic and rbiomirgs_logisticV2 updated with argument check
     
     0.2.19 (September.6.2023)
       - A bug fixed for rbiomirgs_volcano() where the function will crash when no FDR significance was found while FDR correction is active
@@ -51,7 +52,7 @@ Update log
       - The entrez list derived from mirnascan() now has both "list" and "mir_entrez_list" classes
       - A new rbiomirgs_logisticV2() function added that always checks if the "mrnalist" is a "mir_entrez_list" class
         - The original rbiomirgs_logistic() function still available for compatibility purposes
-        - Both the new "mir_entrez_list" classes works with both rbiomirgs_logistic and rbiomirgs_logisticV2() functions
+        - The new "mir_entrez_list" classes works with both rbiomirgs_logistic and rbiomirgs_logisticV2() functions
         - The old entrez list (i.e. only a "list" class) will NOT work with the rbiomirgs_logisticV2() function
         
     0.2.14 (April.16.2021)
