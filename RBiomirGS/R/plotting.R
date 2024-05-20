@@ -79,7 +79,7 @@ rbiomirgs_volcano <- function(gsadfm,
     geom_point(alpha = 0.4, size = symbolSize, aes(colour = cutoff)) +
     scale_color_manual(values = c(nonsigColour, sigColour)) +
     ggtitle(Title) +
-    scale_y_continuous(expand = c(0.02, 0)) +
+    scale_y_continuous(expand = c(0.02, 0), sec.axis = dup_axis()) +
     xlab(xLabel) +
     ylab(yLabel) +
     geom_vline(xintercept = logoddsratio, linetype = "dashed") +
@@ -91,7 +91,8 @@ rbiomirgs_volcano <- function(gsadfm,
           legend.position = "none",
           legend.title = element_blank(),
           axis.text.x = element_text(size = xTxtSize),
-          axis.text.y = element_text(size = yTxtSize, hjust = 0.5))
+          axis.text.y = element_text(size = yTxtSize, hjust = 0.5),
+          axis.title.y.right = element_blank())
 
   if (topgsLabel){
     if (fdr) {
@@ -107,20 +108,21 @@ rbiomirgs_volcano <- function(gsadfm,
   }
 
   grid.newpage()
+  pltgtb <- plt
 
-  # extract gtable
-  pltgtb <- ggplot_gtable(ggplot_build(plt))
-
-  # add the right side y axis
-  Aa <- which(pltgtb$layout$name == "axis-l")
-  pltgtb_a <- pltgtb$grobs[[Aa]]
-  axs <- pltgtb_a$children[[2]]
-  axs$widths <- rev(axs$widths)
-  axs$grobs <- rev(axs$grobs)
-  axs$grobs[[1]]$x <- axs$grobs[[1]]$x - unit(1, "npc") + unit(0.08, "cm")
-  Ap <- c(subset(pltgtb$layout, name == "panel", select = t:r))
-  pltgtb <- gtable_add_cols(pltgtb, pltgtb$widths[pltgtb$layout[Aa, ]$l], length(pltgtb$widths) - 1)
-  pltgtb <- gtable_add_grob(pltgtb, axs, Ap$t, length(pltgtb$widths) - 1, Ap$b)
+  # # Below: not needed due to the ggplot2 (>3.5.0) native support for the functionality
+  # # extract gtable
+  # pltgtb <- ggplot_gtable(ggplot_build(plt))
+  # # add the right side y axis
+  # Aa <- which(pltgtb$layout$name == "axis-l")
+  # pltgtb_a <- pltgtb$grobs[[Aa]]
+  # axs <- pltgtb_a$children[[2]]
+  # axs$widths <- rev(axs$widths)
+  # axs$grobs <- rev(axs$grobs)
+  # axs$grobs[[1]]$x <- axs$grobs[[1]]$x - unit(1, "npc") + unit(0.08, "cm")
+  # Ap <- c(subset(pltgtb$layout, name == "panel", select = t:r))
+  # pltgtb <- gtable_add_cols(pltgtb, pltgtb$widths[pltgtb$layout[Aa, ]$l], length(pltgtb$widths) - 1)
+  # pltgtb <- gtable_add_grob(pltgtb, axs, Ap$t, length(pltgtb$widths) - 1, Ap$b)
 
   # export the file and draw a preview
   ggsave(filename = paste(export_name,".gs.volcano.pdf", sep = ""), plot = pltgtb,
@@ -204,58 +206,124 @@ rbiomirgs_bar <- function(gsadfm,
   baseplt <- ggplot(pltdfm, aes(x = GS, y = coef), environment = loclEnv) +
     geom_bar(position = "dodge", stat = "identity", color = "black", fill = "gray66")+
     scale_x_discrete(expand = c(0.01, 0)) +
-    scale_y_continuous(expand = c(0.01, 0)) +
     ggtitle(Title) +
     geom_hline(yintercept = 0) +
     geom_errorbar(aes(ymin = coef - std.err, ymax = coef + std.err), width = errorbarWidth,
                   position = position_dodge(0.9))
 
-  if (gs.name){
-    plt <- baseplt +
-      xlab(yLabel) + # the arguments for x and y labls are switched as the figure will be rotated
-      ylab(xLabel) + # the arguments for x and y labls are switched as the figure will be rotated
-      theme(panel.background = element_rect(fill = 'white', colour = 'black'),
-            panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
-            plot.title = element_text(hjust = 0.5),
-            legend.position = "bottom",
-            legend.title = element_blank(),
-            axis.text.x = element_text(size = xTxtSize, angle = 0, hjust = 0.5), # x and y not reversed as they are not associated with the roation of the axes.
-            axis.text.y = element_text(size = yTxtSize, hjust = 1)) +
-      coord_flip()
-  } else { # the axes will not be flipped if not to display GS names
-    plt <- baseplt +
-      xlab(xLabel) +
-      ylab(yLabel) +
-      theme(panel.background = element_rect(fill = 'white', colour = 'black'),
-            panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
-            plot.title = element_text(hjust = 0.5),
-            legend.position = "bottom",
-            legend.title = element_blank(),
-            axis.text.y = element_text(size = xTxtSize, angle = 0, hjust = 0.5),
-            axis.text.x = element_blank(),
-            axis.ticks.x = element_blank())
+
+  if (y.rightside) {
+    baseplt <- baseplt +
+      scale_y_continuous(expand = c(0.01, 0), sec.axis = dup_axis())
+
+
+    if (gs.name){
+      plt <- baseplt +
+        xlab(yLabel) + # the arguments for x and y labls are switched as the figure will be rotated
+        ylab(xLabel) + # the arguments for x and y labls are switched as the figure will be rotated
+        theme(panel.background = element_rect(fill = 'white', colour = 'black'),
+              panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+              plot.title = element_text(hjust = 0.5),
+              legend.position = "bottom",
+              legend.title = element_blank(),
+              axis.text.x = element_text(size = xTxtSize, angle = 0, hjust = 0.5), # x and y not reversed as they are not associated with the roation of the axes.
+              axis.text.y = element_text(size = yTxtSize, hjust = 1),
+              axis.title.y.right = element_blank()) +
+        coord_flip()
+    } else { # the axes will not be flipped if not to display GS names
+      plt <- baseplt +
+        xlab(xLabel) +
+        ylab(yLabel) +
+        theme(panel.background = element_rect(fill = 'white', colour = 'black'),
+              panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+              plot.title = element_text(hjust = 0.5),
+              legend.position = "bottom",
+              legend.title = element_blank(),
+              axis.text.y = element_text(size = xTxtSize, angle = 0, hjust = 0.5),
+              axis.text.x = element_blank(),
+              axis.ticks.x = element_blank(),
+              axis.title.y.right = element_blank())
+    }
+  } else {
+    baseplt <- baseplt +
+      scale_y_continuous(expand = c(0.01, 0))
+
+    if (gs.name){
+      plt <- baseplt +
+        xlab(yLabel) + # the arguments for x and y labls are switched as the figure will be rotated
+        ylab(xLabel) + # the arguments for x and y labls are switched as the figure will be rotated
+        theme(panel.background = element_rect(fill = 'white', colour = 'black'),
+              panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+              plot.title = element_text(hjust = 0.5),
+              legend.position = "bottom",
+              legend.title = element_blank(),
+              axis.text.x = element_text(size = xTxtSize, angle = 0, hjust = 0.5), # x and y not reversed as they are not associated with the roation of the axes.
+              axis.text.y = element_text(size = yTxtSize, hjust = 1)) +
+        coord_flip()
+    } else { # the axes will not be flipped if not to display GS names
+      plt <- baseplt +
+        xlab(xLabel) +
+        ylab(yLabel) +
+        theme(panel.background = element_rect(fill = 'white', colour = 'black'),
+              panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+              plot.title = element_text(hjust = 0.5),
+              legend.position = "bottom",
+              legend.title = element_blank(),
+              axis.text.y = element_text(size = xTxtSize, angle = 0, hjust = 0.5),
+              axis.text.x = element_blank(),
+              axis.ticks.x = element_blank())
+    }
   }
+
+  # if (gs.name){
+  #   plt <- baseplt +
+  #     xlab(yLabel) + # the arguments for x and y labls are switched as the figure will be rotated
+  #     ylab(xLabel) + # the arguments for x and y labls are switched as the figure will be rotated
+  #     theme(panel.background = element_rect(fill = 'white', colour = 'black'),
+  #           panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+  #           plot.title = element_text(hjust = 0.5),
+  #           legend.position = "bottom",
+  #           legend.title = element_blank(),
+  #           axis.text.x = element_text(size = xTxtSize, angle = 0, hjust = 0.5), # x and y not reversed as they are not associated with the roation of the axes.
+  #           axis.text.y = element_text(size = yTxtSize, hjust = 1)) +
+  #     coord_flip()
+  # } else { # the axes will not be flipped if not to display GS names
+  #   plt <- baseplt +
+  #     xlab(xLabel) +
+  #     ylab(yLabel) +
+  #     theme(panel.background = element_rect(fill = 'white', colour = 'black'),
+  #           panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+  #           plot.title = element_text(hjust = 0.5),
+  #           legend.position = "bottom",
+  #           legend.title = element_blank(),
+  #           axis.text.y = element_text(size = xTxtSize, angle = 0, hjust = 0.5),
+  #           axis.text.x = element_blank(),
+  #           axis.ticks.x = element_blank())
+  # }
 
   # prepare for preview
   grid.newpage()
+  pltgtb <- plt
 
-  if (y.rightside){   ## add the right-side y axis
-    # extract gtable
-    pltgtb <- ggplot_gtable(ggplot_build(plt))
-
-    # add the right side y axis
-    Aa <- which(pltgtb$layout$name == "axis-l")
-    pltgtb_a <- pltgtb$grobs[[Aa]]
-    axs <- pltgtb_a$children[[2]]
-    axs$widths <- rev(axs$widths)
-    axs$grobs <- rev(axs$grobs)
-    axs$grobs[[1]]$x <- axs$grobs[[1]]$x - unit(1, "npc") + unit(0.08, "cm")
-    Ap <- c(subset(pltgtb$layout, name == "panel", select = t:r))
-    pltgtb <- gtable_add_cols(pltgtb, pltgtb$widths[pltgtb$layout[Aa, ]$l], length(pltgtb$widths) - 1)
-    pltgtb <- gtable_add_grob(pltgtb, axs, Ap$t, length(pltgtb$widths) - 1, Ap$b)
-  } else {
-    pltgtb <- ggplot_gtable(ggplot_build(plt))
-  }
+  # # Below: not needed due to the ggplot2 (>3.5.0) native support for the functionality
+  # if (y.rightside){   ## add the right-side y axis
+  #   # # extract gtable
+  #   # pltgtb <- ggplot_gtable(ggplot_build(plt))
+  #   #
+  #   # # add the right side y axis
+  #   # Aa <- which(pltgtb$layout$name == "axis-l")
+  #   # pltgtb_a <- pltgtb$grobs[[Aa]]
+  #   # axs <- pltgtb_a$children[[2]]
+  #   # axs$widths <- rev(axs$widths)
+  #   # axs$grobs <- rev(axs$grobs)
+  #   # axs$grobs[[1]]$x <- axs$grobs[[1]]$x - unit(1, "npc") + unit(0.08, "cm")
+  #   # Ap <- c(subset(pltgtb$layout, name == "panel", select = t:r))
+  #   # pltgtb <- gtable_add_cols(pltgtb, pltgtb$widths[pltgtb$layout[Aa, ]$l], length(pltgtb$widths) - 1)
+  #   # pltgtb <- gtable_add_grob(pltgtb, axs, Ap$t, length(pltgtb$widths) - 1, Ap$b)
+  # } else {
+  #   # pltgtb <- ggplot_gtable(ggplot_build(plt))
+  #   pltgtb <- plt
+  # }
 
   # export the file and draw a preview
   ggsave(filename = paste(export_name, ".gs.bar.plot.pdf", sep = ""), plot = pltgtb,

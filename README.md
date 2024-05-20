@@ -31,6 +31,11 @@ Installation:
 
 Update log
     
+    0.2.21 (May.20.2024)
+      - Plotting functionalities have updated with the ggplot2 >= 3.5.0 compatibility
+        - Due to the ggplot2 (>=3.5.0) native support for axis duplication, the custome script for the functionality is no longer needed
+        - The package updated with ggplot2 (>=3.5.0) dependency
+    
     0.2.20 (January.3.2024)
       - The hsa_entrez list now is also a "mir_entrez_list" class
       - rbiomirgs_logistic and rbiomirgs_logisticV2 updated with argument check
