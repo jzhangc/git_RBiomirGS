@@ -11,7 +11,6 @@ rbiomirgs_mrnascan(
   addhsaEntrez = FALSE,
   queryType = NULL,
   predictPercentage = 10,
-  url = get_url("scan"),
   parallelComputing = FALSE,
   clusterType = "PSOCK"
 )
@@ -24,8 +23,6 @@ rbiomirgs_mrnascan(
 \item{addhsaEntrez}{When \code{sp = "mmu"} or \code{sp = "rno"}, users can set this argument to \code{TRUE} so that a new list containing hsa ortholog entrez ID will be exported to the environment. The function connects to the up-to-date \code{ensembl} databases.}
 
 \item{queryType}{Type of reuslts. Options are \code{"validated"} and \code{"predicted"}.}
-
-\item{url}{The database host server: \code{"http://multimir.org/cgi-bin/multimir_univ.pl"}}
 
 \item{parallelComputing}{If to use parallel computing or not. Default is \code{FALSE}.}
 

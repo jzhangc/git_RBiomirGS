@@ -33,6 +33,7 @@ Update log
     
     0.2.22 (March.13.2025)
       - Updated the dependent multiMiR package
+      - Updated verbose behaviour for rbiomirgs_mrnascan()
     
     0.2.21 (May.20.2024)
       - Plotting functionalities have updated with the ggplot2 >= 3.5.0 compatibility

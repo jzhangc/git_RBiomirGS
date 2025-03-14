@@ -20,7 +20,6 @@ get_url <- function(url_type = c("full", "predicted.cutoff", "scan")) {
 #' @param addhsaEntrez When \code{sp = "mmu"} or \code{sp = "rno"}, users can set this argument to \code{TRUE} so that a new list containing hsa ortholog entrez ID will be exported to the environment. The function connects to the up-to-date \code{ensembl} databases.
 #' @param queryType Type of reuslts. Options are \code{"validated"} and \code{"predicted"}.
 #' @param predictPrecentage Set only if \code{queryType = "predicted"}. The percentage of the top scored mRNA predictions to return. Default is \code{5}.
-#' @param url The database host server: \code{"http://multimir.org/cgi-bin/multimir_univ.pl"}
 #' @param parallelComputing If to use parallel computing or not. Default is \code{FALSE}.
 #' @param clusterType Only set when \code{parallelComputing = TRUE}, the type for parallel cluster. Options are \code{"PSOCK"} (all operating systems) and \code{"FORK"} (macOS and Unix-like system only). Default is \code{"PSOCK"}.
 #' @return The function returns a \code{list} object with mRNA targets for the query miRNAs, as well as detailed resutls to the working directory as \code{csv} files. When \code{sp = "mmu"} or \code{sp = "rno"}, and \code{addhsaEntrez = TRUE}, a new list containing hsa ortholog entrez ID will be exported to the environment.
@@ -37,7 +36,6 @@ get_url <- function(url_type = c("full", "predicted.cutoff", "scan")) {
 #' @export
 rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addhsaEntrez = FALSE,
                                queryType = NULL, predictPercentage = 10,
-                               url = get_url("scan"),
                                parallelComputing = FALSE, clusterType = "PSOCK"){
 
   #### check the arguments
@@ -53,6 +51,8 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
   }
 
   #### set up the search input
+  url <- get_url("scan")
+
   if (is.null(queryType)){
     stop(cat("Please set the queryType argument. Options are \"validated\" and \"predicted\"."))
   } else if (queryType != "validated" & queryType != "predicted"){
@@ -274,6 +274,8 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
     names(out_hsa_entrez) <- names(out_entrez)
   }
 
+  cat(paste0("Scan ", length(mir), " miRNAs\n"))
+  cat(paste0("Scan type: "), queryType, "\n\n")
   if (!parallelComputing){
     ## populate output list and output
     out[] <- lapply(mir, function(m){
