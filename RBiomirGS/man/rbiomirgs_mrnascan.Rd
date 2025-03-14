@@ -11,7 +11,7 @@ rbiomirgs_mrnascan(
   addhsaEntrez = FALSE,
   queryType = NULL,
   predictPercentage = 10,
-  url = "http://multimir.org/cgi-bin/multimir_univ.pl",
+  url = get_url("scan"),
   parallelComputing = FALSE,
   clusterType = "PSOCK"
 )

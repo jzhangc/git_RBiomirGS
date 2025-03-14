@@ -1,3 +1,17 @@
+#' @title get_url
+#'
+#' @description Get multiMiR server urls
+#' @param url_type Type of url.
+get_url <- function(url_type = c("full", "predicted.cutoff", "scan")) {
+  type <- match.arg(url_type)
+  u <- switch(type,
+              full = "http://multimir.org/multiMiR_dbTables.txt",
+              predicted.cutoff = "http://multimir.org/multimir_cutoffs_2.4.rda",
+              scan = "http://multimir.org/cgi-bin/multimir_univ.pl"
+  )
+  return(u)
+}
+
 #' @title rbiomirgs_mrnascan
 #'
 #' @description Obtain target mRNA list for miRNAs of interest. Results can either be predicted or validated miRNA-mRNA interactions. The function uses multiple databsaes hosted at \code{multimir.ucdenver.edu/}.This function needs a internet connection.
@@ -23,7 +37,7 @@
 #' @export
 rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addhsaEntrez = FALSE,
                                queryType = NULL, predictPercentage = 10,
-                               url = "http://multimir.org/cgi-bin/multimir_univ.pl",
+                               url = get_url("scan"),
                                parallelComputing = FALSE, clusterType = "PSOCK"){
 
   #### check the arguments
@@ -95,7 +109,7 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
 
     } else { # predicted databases
       # from multiMiR pacakge, to get the score from the database
-      tmpfunc_cutoff <- function(cutoff.file = "http://multimir.org/multimir_cutoffs_2.4.rda"){
+      tmpfunc_cutoff <- function(cutoff.file = get_url("predicted.cutoff")){
         multimir_cutoffs <- NULL
         url.file <- url(cutoff.file)
         on.exit(close(url.file))
@@ -169,7 +183,7 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
     if (l == 2) {
       tmpout <- tmprslt[[2]]
     } else if (l == 1) {
-      warning(paste("No records returned for miRNA: ", i, " in database: ", j, ".", sep = ""))
+      cat(paste0("Warning: No records returned for miRNA: ", i, " in database: ", j, "\n"))
     } else if (l == 0) {
       cat(paste("Request to multiMiR web server failed. check the ",
                 "your query, or",
@@ -351,9 +365,9 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
 
   #### message
   if (addhsaEntrez){
-    message(paste("...all done! And entrez ID for hsa orthologs added for ", sp, ".", sep = ""))
+    message(paste0("...all done! And entrez ID for hsa orthologs added for ", sp, "\n"))
   } else {
-    message("...all done!")
+    message("...all done!\n")
   }
 
   #### output
