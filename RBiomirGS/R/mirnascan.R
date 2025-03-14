@@ -95,7 +95,7 @@ rbiomirgs_mrnascan <- function(objTitle = "miRNA", mir =  NULL, sp = "hsa", addh
 
     } else { # predicted databases
       # from multiMiR pacakge, to get the score from the database
-      tmpfunc_cutoff <- function(cutoff.file = "http://multimir.ucdenver.edu/multimir_cutoffs.rda"){
+      tmpfunc_cutoff <- function(cutoff.file = "http://multimir.org/multimir_cutoffs_2.4.rda"){
         multimir_cutoffs <- NULL
         url.file <- url(cutoff.file)
         on.exit(close(url.file))

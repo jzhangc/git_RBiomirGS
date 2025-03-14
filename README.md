@@ -31,6 +31,9 @@ Installation:
 
 Update log
     
+    0.2.22 (March.13.2025)
+      - Updated multiMiR predicted database cutoff file addresss
+    
     0.2.21 (May.20.2024)
       - Plotting functionalities have updated with the ggplot2 >= 3.5.0 compatibility
         - Due to the ggplot2 (>=3.5.0) native support for axis duplication, the custome script for the functionality is no longer needed
